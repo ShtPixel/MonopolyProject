@@ -1,0 +1,20 @@
+#Esta es la astrutura que planteo para el proyecto
+
+frontend/
+│
+├── index.html          # Página principal, contiene el tablero y la interfaz
+├── styles.css          # Estilos globales y del tablero
+├── main.js             # Lógica principal del juego y manipulación del DOM
+│
+├── assets/             # Imagenes, iconos, fichas, etc.
+│   └── ...             # (es opcional) fichas, dados, logos, etc.
+│
+├── components/         # JS para modularizar partes del juego (opcional)
+│
+└── documentation       # Documentación de uso e instalación
+
+# index.html es la pagina principal del juego, esta contendrá la estructura base del juego... El tablero 
+#estará estructurado con la etiqueta div de HTML
+
+#PUSE EL PDF DEL PROYECTO PARA FACILITAR EL ACCESO, POR DEFECTO VS NO LEE ESTOS ARCHIVOS
+#EN CASO DE QUERER ABRIRLO DESDE VS INSTALAR UNA EXTENSION COMO "Dodo Reader"
