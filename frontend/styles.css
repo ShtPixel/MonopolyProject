@@ -27,23 +27,34 @@ es 704px704px para que alcancen 11 celdas por lado*/
     background-color: #e3ffe8;
 
 
-    display: grid; /*Esta linea hace que el tablero se comporte como una cuadrícula */
-    grid-template-columns: [left] 3fr repeat(9, minmax(0, 2fr)) [right] 3fr; /*Esta linea define las columnas de la cuadrícula */
-    grid-template-rows: [top] 3fr repeat(9, 2fr) [bottom] 3fr; /*Esta linea define las filas de la cuadrícula */
+    text-align: center;/*Esta linea centra el texto dentro de cada celda*/
+    display: grid;/*Esta linea hace que el tablero se comporte como una cuadrícula */
+    grid-template-columns: [left] 3fr repeat(9, minmax(0, 2fr)) [right] 3fr;/*Esta linea define las columnas de la cuadrícula */
+    grid-template-rows: [top] 3fr repeat(9, 2fr) [bottom] 3fr;/*Esta linea define las filas de la cuadrícula */
 }
 
-/*Ahora le damos estilo a las casillas del tablero
-.Monopoly-board::before {
-    content: "";
-    width: 64px;
-    height: 64px;
-    border: 4px solid #000000;
-    display: block;
-
-}
-*/
 /*El siguiente bloque de código se encarga de darle estilo a la casilla central del tablero*/
 .center {
     background-color: #000000;
-    grid-area: 2 / 2 / 11 / 11; /*Esta linea hace que la casilla central ocupe las filas y columnas del 2 al 11 (el 11 significa que va hasta el inicio de la fila 11 y la columna 11, osea 10 y 10 respectivamente)*/
+    grid-area: 2 / 2 / 11 / 11;/*Esta linea hace que la casilla central ocupe las filas y columnas del 2 al 11 (el 11 significa que va hasta el inicio de la fila 11 y la columna 11, osea 10 y 10 respectivamente)*/
 }
+
+/*Este bloque solo le da tamaño del top cuando hay un color*/
+.prop {
+    padding-top: 2em;/*Esta linea agrega un espacio en la parte superior de la propiedad*/
+}
+
+/*Este bloque se encarga de darle estilo a las esquinas del tablero*/
+.spot.corner {
+    border: 3px solid #000;
+    height: 100%;/*Esta linea hace que la esquina ocupe todo el alto disponible*/
+    width: 100%;/*Esta linea hace que la esquina ocupe todo el ancho disponible*/
+    margin: auto;/*Esta linea centra la esquina dentro de su celda*/
+}
+
+/*Estas clases se encargan de posicionar las los lados
+ del tablero*/
+.top {grid-row: top;}
+.right {grid-column: right;}
+.bottom {grid-row: bottom;}
+.left {grid-column: left;}
