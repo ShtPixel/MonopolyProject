@@ -1,0 +1,49 @@
+/* El body se encarga de todo el contenido del cuerpo de la pagina
+margin es el espacio entre el contenido y el borde de la ventana
+height es la altura
+display es el tipo de diseño, grid significa que se utiliza un diseño de cuadrícula
+place-items es la forma en que se alinean los elementos dentro de la cuadrícula 
+*/
+body {
+    margin: 0;
+    height: 100vh;
+    display: grid;
+    place-items: center;
+    background-color: #fff;
+}
+
+/*#Monopoly-board le da estilo al tablero de Monopoly, 
+width es el ancho (voy a poner el maximo valor para que sea vea completo en un pc) 
+y height es la altura(poner el maximo valor para que sea vea bien en pc), 
+border es el borde, solid significa que es un borde solido 
+y border-radius es el radio del borde (pa que se vea redondo pues)
+cada celda del tablero es un cuadrado de 64x64px, por ello el tamaño del tabler
+es 704px704px para que alcancen 11 celdas por lado*/
+.Monopoly-board {
+    width: 704px;
+    height: 704px;
+    border: 5px solid #000;
+    border-radius: 10px;
+    background-color: #e3ffe8;
+
+
+    display: grid; /*Esta linea hace que el tablero se comporte como una cuadrícula */
+    grid-template-columns: [left] 3fr repeat(9, minmax(0, 2fr)) [right] 3fr; /*Esta linea define las columnas de la cuadrícula */
+    grid-template-rows: [top] 3fr repeat(9, 2fr) [bottom] 3fr; /*Esta linea define las filas de la cuadrícula */
+}
+
+/*Ahora le damos estilo a las casillas del tablero
+.Monopoly-board::before {
+    content: "";
+    width: 64px;
+    height: 64px;
+    border: 4px solid #000000;
+    display: block;
+
+}
+*/
+/*El siguiente bloque de código se encarga de darle estilo a la casilla central del tablero*/
+.center {
+    background-color: #000000;
+    grid-area: 2 / 2 / 11 / 11; /*Esta linea hace que la casilla central ocupe las filas y columnas del 2 al 11 (el 11 significa que va hasta el inicio de la fila 11 y la columna 11, osea 10 y 10 respectivamente)*/
+}
