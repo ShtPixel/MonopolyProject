@@ -2,20 +2,61 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monopoly</title>
-    <!-- llamar al archivo de estilos -->
-    <link rel="stylesheet" href="frontend/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Monopoly - Menú de Inicio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="frontend/CSS/index.css"> <!-- Esta línea une el CSS local -->
 </head>
 <body>
-    <h1>Tablero de Monopoly</h1>
-    <main class="Monopoly-board">
-        <div class="spot corner top left"> hola</div>
-        <div class="spot corner top right">mundo</div>
-        <div class="spot corner bottom left">xd</div>
-        <div class="spot corner bottom right">blabla</div>
-        <div class="spot bottom"><span>casilla 1</span></div>
-        <div class="center"></div>
-    </main>
+    <div class="menu-container shadow-lg">
+        <div class="monopoly-title">MONOPOLY</div>
+        <button class="btn btn-monopoly btn-lg w-100 mb-3" onclick="startGame()">Iniciar Juego</button>
+        <button class="btn btn-outline-secondary btn-lg w-100 mb-3" onclick="showRules()">Reglas</button>
+        <button class="btn btn-outline-danger btn-lg w-100" onclick="exitGame()">Salir</button>
+    </div>
+
+    <!-- Modal para reglas -->
+    <div class="modal fade" id="rulesModal" tabindex="-1" aria-labelledby="rulesModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rulesModalLabel">Reglas de Monopoly</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <li>Cada jugador tira los dados y avanza por el tablero.</li>
+                        <li>Compra propiedades, construye casas y hoteles.</li>
+                        <li>Cobra alquiler cuando otros caen en tus propiedades.</li>
+                        <li>Evita la bancarrota para ganar el juego.</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function startGame() {
+            // Aquí puedes redirigir a la página del juego o iniciar la lógica
+            alert('¡Comenzando el juego!');
+            // window.location.href = 'juego.html';
+        }
+
+        function showRules() {
+            var rulesModal = new bootstrap.Modal(document.getElementById('rulesModal'));
+            rulesModal.show();
+        }
+
+        function exitGame() {
+            // Puedes cerrar la ventana o mostrar un mensaje
+            if (confirm('¿Seguro que quieres salir?')) {
+                window.close();
+            }
+        }
+    </script>
 </body>
 </html>
