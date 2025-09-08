@@ -3,7 +3,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: #f5f5f5;
+  background: url('../CSS/assets/monopoly-video-game-25icl4oi8y9lnmh7.jpg') center center/cover no-repeat;
   font-family: Arial, sans-serif;
   margin: 0;
 }
@@ -18,7 +18,7 @@ body {
   max-height: 90vmin;
   aspect-ratio: 1 / 1;
   border: 4px solid black;
-  background: white;
+  background: url('../CSS/assets/monopoly-video-game-25icl4oi8y9lnmh7.jpg') center center/cover no-repeat;
   position: relative;
 }
 
@@ -74,7 +74,7 @@ body {
   align-items: center;
   font-size: min(8vw, 8vh, 48px);
   font-weight: bold;
-  color: red;
+  color: black;
   transform: rotate(-30deg);
   z-index: 1;
 }
