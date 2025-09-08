@@ -1,60 +1,165 @@
-/* El body se encarga de todo el contenido del cuerpo de la pagina
-margin es el espacio entre el contenido y el borde de la ventana
-height es la altura
-display es el tipo de diseño, grid significa que se utiliza un diseño de cuadrícula
-place-items es la forma en que se alinean los elementos dentro de la cuadrícula 
-*/
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');
+
+:root {
+  --board: 95;
+  --font: 1;
+  --line: 0.25;
+  --board-face: #bfdbae;
+  --board-back: #5a92ed;
+  
+  --dark: #333;
+  --brown: #965539;
+  --lightblue: #ACDFFB;
+  --magenta: #D93A97;
+  --orange: #F8921C;
+  --red: #ED1B25;
+  --yellow: #FDF100;
+  --green: #1EB159;
+  --blue: #0072BB;
+  
+  /* Money:
+  #ececec	(236,236,236)
+  #ffc3c3	(255,195,195)
+  #d0f4ff	(208,244,255)
+  #f7ffb2	(247,255,178)
+  #f3b6ff	(243,182,255)*/
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
 body {
-    margin: 0;
-    height: 100vh;
-    display: grid;
-    place-items: center;
-    background-color: #fff;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  background-color: #fff;
+  font-family: 'Josefin Sans', sans-serif;
 }
 
-/*#Monopoly-board le da estilo al tablero de Monopoly, 
-width es el ancho (voy a poner el maximo valor para que sea vea completo en un pc) 
-y height es la altura(poner el maximo valor para que sea vea bien en pc), 
-border es el borde, solid significa que es un borde solido 
-y border-radius es el radio del borde (pa que se vea redondo pues)
-cada celda del tablero es un cuadrado de 64x64px, por ello el tamaño del tabler
-es 704px704px para que alcancen 11 celdas por lado*/
-.Monopoly-board {
-    width: 704px;
-    height: 704px;
-    border: 5px solid #000;
-    border-radius: 10px;
-    background-color: #e3ffe8;
-
-
-    text-align: center;/*Esta linea centra el texto dentro de cada celda*/
-    display: grid;/*Esta linea hace que el tablero se comporte como una cuadrícula */
-    grid-template-columns: [left] 3fr repeat(9, minmax(0, 2fr)) [right] 3fr;/*Esta linea define las columnas de la cuadrícula */
-    grid-template-rows: [top] 3fr repeat(9, 2fr) [bottom] 3fr;/*Esta linea define las filas de la cuadrícula */
+.board {
+  display: grid;
+  grid-template-columns: [left] 3fr repeat(9, minmax(0, 2fr)) [right] 3fr;
+  grid-template-rows: [top] 3fr repeat(9, 2fr) [bottom] 3fr;
+  /* min() presently not available
+  (see media query solution) 
+  -------------------------------
+  width: min(90vw, 90vh); 
+  height: min(90vw, 90vh);
+  font-size: min(1.125vw, 1.125vh); */
+  width: calc(var(--board) * var(--ratio)); 
+  height: calc(var(--board) * var(--ratio)); 
+  font-size: calc(var(--font) * var(--ratio));
+  background-color: var(--dark);
+  padding: calc(var(--line) * var(--ratio));
+  grid-gap: calc(var(--line) * var(--ratio));
+  grid-auto-flow: dense;
+  border: calc(var(--line) * var(--ratio) * 3) solid var(--board-back);
+  text-align: center;
+  text-transform: uppercase;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
-
-/*El siguiente bloque de código se encarga de darle estilo a la casilla central del tablero*/
 .center {
-    background-color: #000000;
-    grid-area: 2 / 2 / 11 / 11;/*Esta linea hace que la casilla central ocupe las filas y columnas del 2 al 11 (el 11 significa que va hasta el inicio de la fila 11 y la columna 11, osea 10 y 10 respectivamente)*/
+  background-color: var(--board-face); 
+  grid-area: 2 / 2 / 11 / 11;
 }
-
-/*Este bloque solo le da tamaño del top cuando hay un color*/
+.spot, .corner { 
+  background-color: var(--board-face); 
+}
+/* .spot {
+  border: calc(var(--line) * var(--ratio) / 2) solid var(--dark);
+} */
 .prop {
-    padding-top: 2em;/*Esta linea agrega un espacio en la parte superior de la propiedad*/
+  padding-top: 2em;
 }
-
-/*Este bloque se encarga de darle estilo a las esquinas del tablero*/
 .spot.corner {
-    border: 3px solid #000;
-    height: 100%;/*Esta linea hace que la esquina ocupe todo el alto disponible*/
-    width: 100%;/*Esta linea hace que la esquina ocupe todo el ancho disponible*/
-    margin: auto;/*Esta linea centra la esquina dentro de su celda*/
+  height: 100%;
+  width: 100%;
+  margin: auto;
 }
 
-/*Estas clases se encargan de posicionar las los lados
- del tablero*/
-.top {grid-row: top;}
-.right {grid-column: right;}
-.bottom {grid-row: bottom;}
-.left {grid-column: left;}
+.top { grid-row: top; }
+.right { grid-column: right; }
+.bottom { grid-row: bottom; }
+.left { grid-column: left; }
+
+.left, .right {
+  margin: auto;
+  height: calc(100% / 2 * 3);
+  width: calc(100% / 3 * 2);
+  margin-top: calc(100% / -6);
+}
+.spot.top { transform: rotate(180deg); }
+.spot.left { transform: rotate(90deg); }
+.spot.right { transform: rotate(270deg); }
+
+
+.spot > span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background-color: var(--board-face);
+  padding: 1em 0.5em;
+}
+
+.prop > span {
+  border-top: calc(var(--line) * var(--ratio)) solid var(--dark);
+}
+
+.corner > span {
+  display: block;
+  width: 80%;
+  height: 100%;
+  margin: auto;
+  text-align: center;
+  padding: 1.5em;
+  background-color: transparent;
+}
+
+.corner.bottom.right > span { transform: rotate(45deg); }
+.corner.bottom.left > span { transform: rotate(315deg); }
+.corner.top.left > span { transform: rotate(45deg); }
+.corner.top.right > span { transform: rotate(315deg); }
+
+.prop[data-group="brown"] { background-color: var(--brown); }
+.prop[data-group="lightblue"] { background-color: var(--lightblue); }
+.prop[data-group="magenta"] { background-color: var(--magenta); }
+.prop[data-group="orange"] { background-color: var(--orange); }
+.prop[data-group="red"] { background-color: var(--red); }
+.prop[data-group="yellow"] { background-color: var(--yellow); }
+.prop[data-group="green"] { background-color: var(--green); }
+.prop[data-group="blue"] { background-color: var(--blue); }
+
+/* Realizing this could have been done other ways. I thought keeping the .corner/.spot elements at direct children of the .board, in the correct order of play, and without adding specific classes to HTML, was best to balance cleanliness and scalability. */
+.spot.bottom:nth-of-type(2) {order: -1;}
+.spot.bottom:nth-of-type(3) {order: -2;}
+.spot.bottom:nth-of-type(4) {order: -3;}
+.spot.bottom:nth-of-type(5) {order: -4;}
+.spot.bottom:nth-of-type(6) {order: -5;}
+.spot.bottom:nth-of-type(7) {order: -6;}
+.spot.bottom:nth-of-type(8) {order: -7;}
+.spot.bottom:nth-of-type(9) {order: -8;}
+.spot.bottom:nth-of-type(10) {order: -9;}
+.spot.left:nth-of-type(12) {order: -1; }
+.spot.left:nth-of-type(13) {order: -2; }
+.spot.left:nth-of-type(14) {order: -3; }
+.spot.left:nth-of-type(15) {order: -4; }
+.spot.left:nth-of-type(16) {order: -5; }
+.spot.left:nth-of-type(17) {order: -6; }
+.spot.left:nth-of-type(18) {order: -7; }
+.spot.left:nth-of-type(19) {order: -8; }
+.spot.left:nth-of-type(20) {order: -9; }
+
+@media screen and (orientation:portrait) {
+  :root {
+    --ratio: 1vw;
+  }
+}
+
+@media screen and (orientation:landscape) {
+  :root {
+    --ratio: 1vh;
+  }
+}

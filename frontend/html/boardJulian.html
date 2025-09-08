@@ -1,21 +1,66 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monopoly</title>
     <!-- llamar al archivo de estilos -->
-    <link rel="stylesheet" href="frontend/styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
+
 <body>
     <h1>Tablero de Monopoly</h1>
-    <main class="Monopoly-board">
-        <div class="spot corner top left"> hola</div>
-        <div class="spot corner top right">mundo</div>
-        <div class="spot corner bottom left">xd</div>
-        <div class="spot corner bottom right">blabla</div>
-        <div class="spot bottom"><span>casilla 1</span></div>
-        <div class="center"></div>
+    <main class="board">
+        <!-- GO (esquina inferior derecha) -->
+        <div class="spot corner" style="grid-row: 11; grid-column: 11;"><span>Go</span></div>
+        <!-- Mediterranean Avenue -->
+        <div class="spot prop" data-group="brown" style="grid-row: 11; grid-column: 10;"><span>Mediterranean Avenue</span></div>
+        <!-- Community Chest -->
+        <div class="spot" style="grid-row: 11; grid-column: 9;"><span>Community Chest</span></div>
+        <div class="spot bottom prop" data-group="brown"><span>Baltic Avenue</span></div>
+        <div class="spot bottom"><span>Income Tax</span></div>
+        <div class="spot bottom"><span>Reading Railroad</span></div>
+        <div class="spot bottom prop" data-group="lightblue"><span>Oriental Avenue</span></div>
+        <div class="spot bottom"><span>Chance</span></div>
+        <div class="spot bottom prop" data-group="lightblue"><span>Vermont Avenue</span></div>
+        <div class="spot bottom prop" data-group="lightblue"><span>Connecticut Avenue</span></div>
+        <!-- Jail (esquina inferior izquierda) -->
+        <div class="spot corner" style="grid-row: 11; grid-column: 1;"><span>In Jail / Just Visiting</span></div>
+        <div class="spot left prop" data-group="magenta"><span>St. Charles Place</span></div>
+        <div class="spot left"><span>Electric Company</span></div>
+        <div class="spot left prop" data-group="magenta"><span>States Avenue</span></div>
+        <div class="spot left prop" data-group="magenta"><span>Virginia Avenue</span></div>
+        <div class="spot left"><span>Pennsylvania Railroad</span></div>
+        <div class="spot left prop" data-group="orange"><span>St. James Place</span></div>
+        <div class="spot left"><span>Community Chest</span></div>
+        <div class="spot left prop" data-group="orange"><span>Tennessee Avenue</span></div>
+        <div class="spot left prop" data-group="orange"><span>New York Avenue</span></div>
+        <!-- Free Parking (esquina superior izquierda) -->
+        <div class="spot corner" style="grid-row: 1; grid-column: 1;"><span>Free Parking</span></div>
+        <div class="spot top prop" data-group="red"><span>Kentucky Avenue</span></div>
+        <div class="spot top"><span>Chance</span></div>
+        <div class="spot top prop" data-group="red"><span>Indiana Avenue</span></div>
+        <div class="spot top prop" data-group="red"><span>Illinois Avenue</span></div>
+        <div class="spot top"><span>B.B.Q. Railroad</span></div>
+        <div class="spot top prop" data-group="yellow"><span>Atlantic Avenue</span></div>
+        <div class="spot top prop" data-group="yellow"><span>Ventnor Avenue</span></div>
+        <div class="spot top"><span>Water Works</span></div>
+        <div class="spot top prop" data-group="yellow"><span>Marvin Gardens</span></div>
+        <!-- Go to Jail (esquina superior derecha) -->
+        <div class="spot corner" style="grid-row: 1; grid-column: 11;"><span>Go To Jail</span></div>
+        <div class="spot right prop" data-group="green"><span>Pacific Avenue</span></div>
+        <div class="spot right prop" data-group="green"><span>North Carolina Avenue</span></div>
+        <div class="spot right"><span>Community Chest</span></div>
+        <div class="spot right prop" data-group="green"><span>Pennsylvania Avenue</span></div>
+        <div class="spot right"><span>Short Line</span></div>
+        <div class="spot right"><span>Chance</span></div>
+        <div class="spot right prop" data-group="blue"><span>Park Place</span></div>
+        <div class="spot right"><span>Luxury Tax</span></div>
+        <div class="spot right prop" data-group="blue"><span>Boardwalk</span></div>
+        <!-- Centro -->
+        <div class="center" style="grid-area: 2 / 2 / 11 / 11;"></div>
     </main>
 </body>
+
 </html>
