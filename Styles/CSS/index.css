@@ -1,15 +1,16 @@
 /* CSS/index.css */
         body {
-            background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+            background: url('../images/blabla.jpg') no-repeat center center;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            background-size: cover;
         }
         .menu-container {
-            background: rgba(255,255,255,0.95);
+            background: rgba(118, 167, 228, 0.95);
             border-radius: 16px;
-            box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37);
+            box-shadow: 0px 8px 32px 0 rgba(255, 13, 13, 0.37);
             padding: 40px 30px;
             text-align: center;
             max-width: 350px;
@@ -17,20 +18,36 @@
         }
         .monopoly-title {
             font-family: 'Impact', 'Arial Black', sans-serif;
-            color: #d7263d;
+            color: #ffffff;
             letter-spacing: 2px;
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 24px;
-            text-shadow: 2px 2px 0 #fff, 4px 4px 0 #000;
+            text-shadow: 0px 0px 9px  #000;
+            background-color: red;
+            border: #ffffff 4px solid;
         }
-        .btn-monopoly {
+        .btn-play {
             background-color: #43cea2;
+        }
+
+        .btn-rules {
+            background-color: #ffc107;
+        }
+
+        .btn-exit {
+            background-color: #dc3545;
+        }
+
+        .btn-monopoly{
             color: #fff;
             font-weight: bold;
             border: none;
             transition: background 0.2s;
         }
+
+
         .btn-monopoly:hover {
             background-color: #185a9d;
+            font-weight: bold;
             color: #fff;
         }
