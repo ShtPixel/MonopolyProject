@@ -4,28 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Monopoly - Tablero</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../Styles/CSS/board.css"> <!-- Ruta corregida -->
+  <link rel="stylesheet" href="../Styles/CSS/dados.css"> <!-- Ruta corregida -->
   <script src="../controllers/dados.js" defer></script>
 </head>
 <body>
 
-  <!-- Botón de "Volver al Inicio" en la esquina superior izquierda -->
-<div class="back-button-container">
-  <button onclick="window.location.href='../index.html'" class="back-btn">Volver al Inicio</button>
-</div>
+  <!-- Navbar mejorado -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+  <a class="navbar-brand" href="#">Monopoly</a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-  <!-- Interfaz de lanzamiento de dados -->
-  <div class="hud">
-    <h2>Lanzar Dados</h2>
-    <div class="dice-container">
-      <div id="die1" class="die"></div>
-      <div id="die2" class="die"></div>
-    </div>
-    <button id="rollBtn" class="btn">Lanzar dados</button>
-    <input id="debugDice" class="input" placeholder="Debug: 3,4" />
-    <strong id="sumLabel">Suma: 0</strong>
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+      </li>
+    </ul>
+    <form class="d-flex my-2 my-lg-0">
+      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-primary" type="submit">Search</button>
+    </form>
   </div>
 
+  <!-- Contenedor de los dados dentro de la navbar -->
+  <div class="navbar-dice">
+    <div id="die1" class="die">🎲</div>
+    <div id="die2" class="die">🎲</div>
+    <button id="rollDiceButton" class="btn btn-outline-success ms-2">Lanzar Dados</button>
+  </div>
+</nav>
+
+<div class="container">
   <!-- Tablero de Monopoly -->
   <div class="board" id="board">
     <!-- Fila superior -->
@@ -83,8 +103,7 @@
     <div id="player-1" class="player" style="background-color: red;"></div>
     <div id="player-2" class="player" style="background-color: blue;"></div>
   </div>
-
-  
-
+</div>
 </body>
+<script src="../controllers/dados.js" type="module"></script>
 </html>

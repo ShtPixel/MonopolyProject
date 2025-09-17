@@ -1,160 +1,19 @@
-/* dados.css */
-body {
+.navbar-dice {
   display: flex;
-  justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background: #f0f0f0;
-  font-family: Arial, sans-serif;
-  margin: 0;
-  flex-direction: column;
-}
-
-.hud {
-  display: flex;
-  justify-content: center;
   gap: 10px;
-  flex-direction: column;
-  align-items: center;
-}
-
-.dice-container {
-  display: flex;
-  gap: 20px;
 }
 
 .die {
-  width: 100px;
-  height: 100px;
-  background-color: #fff;
-  border: 5px solid #333;
-  border-radius: 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 3rem;
-  color: #333;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-  position: relative;
-  transition: all 0.4s ease-in-out;
-}
-
-.die .dot {
-  width: 18px;
-  height: 18px;
-  background-color: #333;
-  border-radius: 50%;
-  position: absolute;
-}
-
-.die .dot-1 {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.die .dot-2 {
-  top: 20%;
-  left: 20%;
-}
-.die .dot-3 {
-  top: 20%;
-  right: 20%;
-}
-.die .dot-4 {
-  bottom: 20%;
-  left: 20%;
-}
-.die .dot-5 {
-  bottom: 20%;
-  right: 20%;
-}
-.die .dot-6 {
-  top: 20%;
-  left: 0;
-  right: 0;
-}
-
-.die[data-value="1"] .dot-1 {
-  display: block;
-}
-.die[data-value="2"] .dot-1,
-.die[data-value="2"] .dot-2 {
-  display: block;
-}
-.die[data-value="3"] .dot-1,
-.die[data-value="2"] .dot-2,
-.die[data-value="3"] .dot-3 {
-  display: block;
-}
-.die[data-value="4"] .dot-1,
-.die[data-value="2"] .dot-2,
-.die[data-value="3"] .dot-3,
-.die[data-value="4"] .dot-4 {
-  display: block;
-}
-.die[data-value="5"] .dot-1,
-.die[data-value="2"] .dot-2,
-.die[data-value="3"] .dot-3,
-.die[data-value="4"] .dot-4,
-.die[data-value="5"] .dot-5 {
-  display: block;
-}
-.die[data-value="6"] .dot-1,
-.die[data-value="2"] .dot-2,
-.die[data-value="3"] .dot-3,
-.die[data-value="4"] .dot-4,
-.die[data-value="5"] .dot-5,
-.die[data-value="6"] .dot-6 {
-  display: block;
-}
-
-.shake {
-  animation: shake 0.8s ease-in-out;
-}
-
-@keyframes shake {
-  0% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(90deg);
-  }
-  50% {
-    transform: rotate(180deg);
-  }
-  75% {
-    transform: rotate(270deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.btn {
-  padding: 10px 20px;
-  background-color: #0072bb;
-  color: white;
-  font-size: 1rem;
+  font-size: 30px;
+  padding: 10px;
+  background-color: #f1f1f1;
   border-radius: 5px;
+  width: 40px;
+  text-align: center;
+}
+
+#rollDiceButton {
+  font-size: 16px;
   cursor: pointer;
-  margin-top: 20px;
-  transition: background-color 0.2s;
-}
-
-.btn:hover {
-  background-color: #005f8a;
-}
-
-.input {
-  padding: 8px;
-  font-size: 1rem;
-  width: 140px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-strong {
-  font-size: 1.5rem;
-  color: #333;
-  margin-top: 20px;
 }
