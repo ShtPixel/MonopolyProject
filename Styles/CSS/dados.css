@@ -47,30 +47,87 @@ body {
   position: absolute;
 }
 
-.die .dot-1 { top: 50%; left: 50%; transform: translate(-50%, -50%); }
-.die .dot-2 { top: 20%; left: 20%; }
-.die .dot-3 { top: 20%; right: 20%; }
-.die .dot-4 { bottom: 20%; left: 20%; }
-.die .dot-5 { bottom: 20%; right: 20%; }
-.die .dot-6 { top: 20%; left: 0; right: 0; }
+.die .dot-1 {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.die .dot-2 {
+  top: 20%;
+  left: 20%;
+}
+.die .dot-3 {
+  top: 20%;
+  right: 20%;
+}
+.die .dot-4 {
+  bottom: 20%;
+  left: 20%;
+}
+.die .dot-5 {
+  bottom: 20%;
+  right: 20%;
+}
+.die .dot-6 {
+  top: 20%;
+  left: 0;
+  right: 0;
+}
 
-.die[data-value="1"] .dot-1 { display: block; }
-.die[data-value="2"] .dot-1, .die[data-value="2"] .dot-2 { display: block; }
-.die[data-value="3"] .dot-1, .die[data-value="2"] .dot-2, .die[data-value="3"] .dot-3 { display: block; }
-.die[data-value="4"] .dot-1, .die[data-value="2"] .dot-2, .die[data-value="3"] .dot-3, .die[data-value="4"] .dot-4 { display: block; }
-.die[data-value="5"] .dot-1, .die[data-value="2"] .dot-2, .die[data-value="3"] .dot-3, .die[data-value="4"] .dot-4, .die[data-value="5"] .dot-5 { display: block; }
-.die[data-value="6"] .dot-1, .die[data-value="2"] .dot-2, .die[data-value="3"] .dot-3, .die[data-value="4"] .dot-4, .die[data-value="5"] .dot-5, .die[data-value="6"] .dot-6 { display: block; }
+.die[data-value="1"] .dot-1 {
+  display: block;
+}
+.die[data-value="2"] .dot-1,
+.die[data-value="2"] .dot-2 {
+  display: block;
+}
+.die[data-value="3"] .dot-1,
+.die[data-value="2"] .dot-2,
+.die[data-value="3"] .dot-3 {
+  display: block;
+}
+.die[data-value="4"] .dot-1,
+.die[data-value="2"] .dot-2,
+.die[data-value="3"] .dot-3,
+.die[data-value="4"] .dot-4 {
+  display: block;
+}
+.die[data-value="5"] .dot-1,
+.die[data-value="2"] .dot-2,
+.die[data-value="3"] .dot-3,
+.die[data-value="4"] .dot-4,
+.die[data-value="5"] .dot-5 {
+  display: block;
+}
+.die[data-value="6"] .dot-1,
+.die[data-value="2"] .dot-2,
+.die[data-value="3"] .dot-3,
+.die[data-value="4"] .dot-4,
+.die[data-value="5"] .dot-5,
+.die[data-value="6"] .dot-6 {
+  display: block;
+}
 
 .shake {
   animation: shake 0.8s ease-in-out;
 }
 
 @keyframes shake {
-  0% { transform: rotate(0deg); }
-  25% { transform: rotate(90deg); }
-  50% { transform: rotate(180deg); }
-  75% { transform: rotate(270deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(90deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  75% {
+    transform: rotate(270deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .btn {
