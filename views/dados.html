@@ -1,48 +1,28 @@
-<!-- views/dados.html -->
-<div class="dice-container text-center my-3">
-  <h3>Lanzamiento de Dados</h3>
-
-  <div class="dices">
-    <div class="dice" id="dado1">🎲</div>
-    <div class="dice" id="dado2">🎲</div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Monopoly - Dados</title>
+  <link rel="stylesheet" href="../Styles/CSS/dados.css"> <!-- Ruta corregida -->
+  <script src="../controllers/dados.js" defer></script>
+</head>
+<body>
+  <!-- Interfaz de lanzamiento de dados -->
+  <div class="hud">
+    <h2>Lanzar Dados</h2>
+    <div class="dice-container">
+      <div id="die1" class="die"></div>
+      <div id="die2" class="die"></div>
+    </div>
+    <button id="rollBtn" class="btn">Lanzar dados</button>
+    <input id="debugDice" class="input" placeholder="Debug: 3,4" />
+    <strong id="sumLabel">Suma: 0</strong>
   </div>
 
-  <div class="mb-2 mt-2">
-    <input type="number" id="dado1Input" min="1" max="6" placeholder="Dado 1 (opcional)">
-    <input type="number" id="dado2Input" min="1" max="6" placeholder="Dado 2 (opcional)">
+  <!-- Enlace de regreso al tablero -->
+  <div class="link-container">
+    <a href="../views/board.html" class="btn">Ir al Tablero</a>
   </div>
-
-  <button class="btn btn-monopoly" onclick="lanzarDados()">🎲 Lanzar Dados</button>
-  <p id="resultadoDados" class="mt-3 fw-bold"></p>
-</div>
-
-<!-- Estilos rápidos para los dados -->
-<style>
-  .dices {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin: 15px 0;
-  }
-
-  .dice {
-    width: 60px;
-    height: 60px;
-    background: white;
-    border: 2px solid #000;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
-    transition: transform 0.5s ease;
-  }
-
-  .dice.rolling {
-    transform: rotate(360deg) scale(1.2);
-  }
-</style>
-
-<!-- Vinculamos el JS -->
-<script src="../controllers/Dados.js"></script>
+</body>
+</html>

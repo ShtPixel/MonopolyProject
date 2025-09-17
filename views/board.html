@@ -2,13 +2,32 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Monopoly</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Monopoly - Tablero</title>
   <link rel="stylesheet" href="../Styles/CSS/board.css"> <!-- Ruta corregida -->
-  <script src="../controllers/dados.js"></script>
-
+  <script src="../controllers/dados.js" defer></script>
 </head>
 <body>
-  <div class="board">
+
+  <!-- Botón de "Volver al Inicio" en la esquina superior izquierda -->
+<div class="back-button-container">
+  <button onclick="window.location.href='../index.html'" class="back-btn">Volver al Inicio</button>
+</div>
+
+  <!-- Interfaz de lanzamiento de dados -->
+  <div class="hud">
+    <h2>Lanzar Dados</h2>
+    <div class="dice-container">
+      <div id="die1" class="die"></div>
+      <div id="die2" class="die"></div>
+    </div>
+    <button id="rollBtn" class="btn">Lanzar dados</button>
+    <input id="debugDice" class="input" placeholder="Debug: 3,4" />
+    <strong id="sumLabel">Suma: 0</strong>
+  </div>
+
+  <!-- Tablero de Monopoly -->
+  <div class="board" id="board">
     <!-- Fila superior -->
     <div class="cell corner">Salida</div>
     <div class="cell property">Mediterranean Ave</div>
@@ -59,6 +78,13 @@
 
     <!-- Centro -->
     <div class="center">MONOPOLY</div>
+
+    <!-- Jugadores (Fichas) -->
+    <div id="player-1" class="player" style="background-color: red;"></div>
+    <div id="player-2" class="player" style="background-color: blue;"></div>
   </div>
+
+  
+
 </body>
 </html>

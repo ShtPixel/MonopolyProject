@@ -1,50 +1,53 @@
 // controllers/dados.js
-let jugadorActual = 1; // ejemplo de jugador en turno
+const el = {
+  rollBtn: document.getElementById("rollBtn"),
+  die1: document.getElementById("die1"),
+  die2: document.getElementById("die2"),
+  sumLabel: document.getElementById("sumLabel"),
+  debug: document.getElementById("debugDice"),
+};
 
-function lanzarDados() {
-  const dado1El = document.getElementById("dado1");
-  const dado2El = document.getElementById("dado2");
+const rand = () => 1 + Math.floor(Math.random() * 6);
+const parseDebug = (s) => {
+  if (!s) return null;
+  const v = s.split(",").map((t) => parseInt(t.trim(), 10));
+  return v.length === 2 && v.every((n) => n >= 1 && n <= 6) ? v : null;
+};
 
-  // Entradas del usuario
-  let dado1 =
-    parseInt(document.getElementById("dado1Input").value) ||
-    Math.floor(Math.random() * 6) + 1;
-  let dado2 =
-    parseInt(document.getElementById("dado2Input").value) ||
-    Math.floor(Math.random() * 6) + 1;
+function renderSum([a, b]) {
+  el.sumLabel.textContent = `Suma: ${a + b}`;
+}
 
-  // Asegurar valores entre 1 y 6
-  dado1 = Math.min(6, Math.max(1, dado1));
-  dado2 = Math.min(6, Math.max(1, dado2));
+function updateDiceVisual([a, b]) {
+  // Actualizar los valores de los dados en las etiquetas
+  el.die1.setAttribute("data-value", a);
+  el.die2.setAttribute("data-value", b);
 
-  // Animación inicial
-  dado1El.classList.add("rolling");
-  dado2El.classList.add("rolling");
+  // Añadir la animación de "sacudida" a los dados
+  el.die1.classList.add("shake");
+  el.die2.classList.add("shake");
 
-  // Retraso para mostrar resultado después de animar
+  // Eliminar la animación después de 0.8 segundos
   setTimeout(() => {
-    dado1El.classList.remove("rolling");
-    dado2El.classList.remove("rolling");
-
-    dado1El.textContent = getEmoji(dado1);
-    dado2El.textContent = getEmoji(dado2);
-
-    const suma = dado1 + dado2;
-    document.getElementById(
-      "resultadoDados"
-    ).innerText = `Jugador ${jugadorActual} sacó ${dado1} y ${dado2} → Total: ${suma}`;
-
-    moverFicha(jugadorActual, suma);
-  }, 600);
+    el.die1.classList.remove("shake");
+    el.die2.classList.remove("shake");
+  }, 800);
 }
 
-// Función auxiliar: devuelve un emoji representando la cara del dado
-function getEmoji(valor) {
-  const caras = ["", "⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
-  return caras[valor];
+function roll() {
+  const dbg = parseDebug(el.debug.value);
+  const d = dbg ?? [rand(), rand()];
+  renderSum(d);
+  updateDiceVisual(d);
+
+  // Emitir un evento con la suma de los dados
+  const event = new CustomEvent("dice:rolled", {
+    detail: { dice: d, sum: d[0] + d[1] },
+  });
+  window.dispatchEvent(event);
 }
 
-// Ejemplo de función para mover fichas (puedes personalizar con tu lógica)
-function moverFicha(jugador, pasos) {
-  console.log(`Mover la ficha del jugador ${jugador} ${pasos} pasos.`);
-}
+el.rollBtn?.addEventListener("click", roll);
+el.debug?.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") roll();
+});
