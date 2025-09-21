@@ -18,8 +18,28 @@
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" class="form-control" placeholder="********" required>
         <br>
+
+        <h4>Selecciona el color</h4>
+        <select id="color" name="color" class="form-select" required>
+            <option value="" disabled selected>Choose your color</option>
+            <option value="red">Red</option>
+            <option value="blue">Blue</option>
+            <option value="green">Green</option>
+            <option value="yellow">Yellow</option>
+        </select>
+        
+        <h4>Selecciona el tipo de ficha</h4>
+        <select id="token" name="token" class="form-select" required>
+            <option value="car">Car</option>
+            <option value="hat">Hat</option>
+            <option value="dog">Dog</option>
+            <option value="ship">Ship</option>
+        </select>
         <button class="btn btn-play btn-monopoly btn-lg w-100 mb-3" href="../views/board.html">Iniciar Juego</button>
-     
+    </div>
+
+    <div>
+
     </div>
 </body>
 </html>
