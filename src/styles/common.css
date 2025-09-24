@@ -1,44 +1,55 @@
 :root {
     --primary-color: #43cea2;
-    --warning-color: #ffc107;
-    --danger-color: #dc3545;
-    --background-opacity: rgba(118, 168, 228, 0.214);
-    --shadow-color: rgba(255, 13, 13, 0.37);
+    --warning-color: #ffd700;
+    --danger-color: #ff4444;
+    --background-opacity: rgba(230, 220, 220, 0.319);
+    --shadow-color: rgba(0, 0, 0, 0.5);
     --text-light: #ffffff;
     --hover-color: #185a9d;
+    --border-radius: 12px;
+    --transition-speed: 0.3s;
 }
 
 /* Base Layout */
 body {
-    background: url('../../assets/images/blabla.jpg') no-repeat center center;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                url('../../assets/images/blabla.jpg') no-repeat center center;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     background-size: cover;
+    font-family: 'Poppins', sans-serif;
 }
 
 /* Common Components */
 .menu-container {
     background: var(--background-opacity);
-    border-radius: 16px;
-    box-shadow: 0px 8px 32px 0 var(--shadow-color);
-    padding: 40px 30px;
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 32px 0 var(--shadow-color);
+    padding: 2.5rem;
     text-align: center;
-    max-width: 350px;
-    width: 100%;
+    max-width: 400px;
+    width: 90%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btn-monopoly {
     color: var(--text-light);
-    font-weight: bold;
+    font-weight: 600;
     border: none;
-    transition: background 0.2s;
+    border-radius: var(--border-radius);
+    padding: 12px 24px;
+    transition: all var(--transition-speed) ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 8px 0;
 }
 
 .btn-monopoly:hover {
-    background-color: var(--hover-color);
-    color: var(--text-light);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .btn-play {

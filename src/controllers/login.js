@@ -12,9 +12,23 @@ class LoginController {
 
     async loadCountries() {
         try {
-            const response = await fetch('http://localhost:3000/api/countries');
+            const response = await fetch('http://localhost:5000/countries');
             const countries = await response.json();
-            this.populateCountrySelect(countries);
+            
+            // Convertir el array de objetos a un array de {id, name}
+            const formattedCountries = countries.reduce((acc, country) => {
+                const [code, name] = Object.entries(country)[0];
+                acc.push({
+                    id: code,
+                    name: name
+                });
+                return acc;
+            }, []);
+            
+            // Ordenar países alfabéticamente por nombre
+            formattedCountries.sort((a, b) => a.name.localeCompare(b.name));
+            
+            this.populateCountrySelect(formattedCountries);
         } catch (error) {
             console.error('Error loading countries:', error);
             alert('Error loading countries. Please try again later.');

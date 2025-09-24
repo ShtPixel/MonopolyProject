@@ -1,20 +1,53 @@
 @import 'common.css';
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
 .monopoly-title {
     font-family: 'Impact', 'Arial Black', sans-serif;
     color: var(--text-light);
-    letter-spacing: 2px;
-    font-size: 3rem;
-    margin-bottom: 24px;
-    text-shadow: 0px 0px 9px #000;
+    letter-spacing: 3px;
+    font-size: 3.5rem;
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5),
+                 0 0 20px rgba(255, 255, 255, 0.3);
     background-color: var(--danger-color);
     border: var(--text-light) 4px solid;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    transform: rotate(-2deg);
 }
 
 .btn-rules {
     background-color: var(--warning-color);
+    color: #000;
 }
 
 .btn-exit {
     background-color: var(--danger-color);
+}
+
+/* Animaciones para los botones */
+.btn-play:hover {
+    background-color: #2ab386;
+}
+
+.btn-rules:hover {
+    background-color: #ffc107;
+}
+
+.btn-exit:hover {
+    background-color: #dc3545;
+}
+
+/* Efecto de brillo para el título */
+@keyframes glow {
+    from {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff;
+    }
+    to {
+        text-shadow: 0 0 10px #fff, 0 0 20px var(--primary-color);
+    }
+}
+
+.monopoly-title {
+    animation: glow 2s ease-in-out infinite alternate;
 }
