@@ -1,26 +1,48 @@
-// Función para lanzar los dados y mostrar el resultado
-function rollDice() {
-  // Generar un número aleatorio entre 1 y 6 para cada dado
-  let die1Value = Math.floor(Math.random() * 6) + 1;
-  let die2Value = Math.floor(Math.random() * 6) + 1;
+// Esperar a que el DOM se cargue completamente
+document.addEventListener("DOMContentLoaded", function () {
+  const die1 = document.getElementById("die1");
+  const die2 = document.getElementById("die2");
+  const sumLabel = document.getElementById("sumLabel");
+  const debugDice = document.getElementById("debugDice");
 
-  // Mostrar el valor en los elementos correspondientes
-  document.getElementById("die1").textContent = getDiceEmoji(die1Value);
-  document.getElementById("die2").textContent = getDiceEmoji(die2Value);
-}
+  // Función para lanzar los dados y mostrar el resultado
+  function rollDice() {
+    let val1, val2;
+    const debug = debugDice.value.trim();
 
-// Función para convertir el número en un emoji de dado
-function getDiceEmoji(number) {
-  const diceEmojis = {
-    1: "⚀",
-    2: "⚁",
-    3: "⚂",
-    4: "⚃",
-    5: "⚄",
-    6: "⚅",
-  };
-  return diceEmojis[number];
-}
+    if (debug) {
+      // Modo de depuración
+      const parts = debug.split(",").map((x) => parseInt(x, 10));
+      if (
+        parts.length === 2 &&
+        parts.every((n) => Number.isInteger(n) && n >= 1 && n <= 6)
+      ) {
+        val1 = parts[0];
+        val2 = parts[1];
+      } else {
+        alert("Ingrese dos números entre 1 y 6, separados por coma.");
+        return;
+      }
+    } else {
+      // Generar números aleatorios para los dados
+      val1 = Math.floor(Math.random() * 6) + 1;
+      val2 = Math.floor(Math.random() * 6) + 1;
+    }
 
-// Asignar la función rollDice al botón de lanzar dados
-document.getElementById("rollDiceButton").addEventListener("click", rollDice);
+    // Actualizar los dados con los valores generados
+    die1.textContent = val1;
+    die2.textContent = val2;
+
+    // Mostrar la suma de los dados
+    sumLabel.textContent = "Suma: " + (val1 + val2);
+  }
+
+  // Asignar el evento de clic al botón "Lanzar Dados"
+  const rollDiceButton = document.getElementById("rollDiceButton");
+  rollDiceButton.addEventListener("click", rollDice);
+
+  // También permitir el lanzamiento de los dados presionando Enter en el campo de depuración
+  debugDice.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") rollDice();
+  });
+});

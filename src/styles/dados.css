@@ -1,18 +1,81 @@
+/* Mejora de la visualización de los dados en la barra de navegación */
 .navbar-dice {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 20px;  /* Aumentar espacio entre los dados y el botón */
 }
 
 .die {
-  font-size: 30px;
-  padding: 10px;
-  background-color: #f1f1f1;
-  border-radius: 5px;
+  font-size: 50px; /* Aumentar el tamaño de los dados */
+  padding: 15px;
+  background-color: #e0e0e0;  /* Fondo claro para los dados */
+  border-radius: 10px;  /* Bordes más redondeados */
   text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  /* Sombra para dar efecto 3D */
+  transition: transform 0.3s ease;  /* Animación de transición */
 }
 
+.die:hover {
+  transform: scale(1.1);  /* Efecto de hover que aumenta el tamaño del dado */
+}
+
+/* Estilo para el botón "Lanzar Dados" */
 #rollDiceButton {
-  font-size: 16px;
+  font-size: 18px;
   cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 12px;  /* Bordes más redondeados */
+  background-color: #007bff;  /* Color de fondo azul */
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;  /* Transición suave */
+}
+
+#rollDiceButton:hover {
+  background-color: #0056b3;  /* Cambio de color cuando se pasa el ratón */
+  transform: scale(1.05);  /* Efecto de aumento al pasar el ratón */
+}
+
+#rollDiceButton:active {
+  transform: scale(0.95);  /* Efecto cuando se hace clic */
+}
+
+/* Añadir un efecto de sombra y mejorar el diseño de los dados */
+.die {
+  background-color: #f8f8f8;  /* Fondo más claro para los dados */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);  /* Sombra más fuerte */
+}
+
+.die1, .die2 {
+  cursor: pointer;  /* Cambiar cursor para indicar que son interactivos */
+}
+
+/* Estilos para la barra de navegación */
+.navbar {
+  background-color: #007bff; /* Fondo azul en la navbar */
+  padding: 1rem; /* Mejorar espaciado */
+}
+
+.navbar-nav .nav-link {
+  font-weight: bold;
+  color: white !important;  /* Asegurar que el texto sea blanco */
+}
+
+.navbar-nav .nav-link:hover {
+  color: #ffcc00 !important;  /* Cambio de color al pasar el ratón */
+}
+
+/* Ajuste responsivo para dispositivos móviles */
+@media screen and (max-width: 768px) {
+  .navbar-dice {
+    gap: 10px;  /* Reducir espacio en pantallas pequeñas */
+  }
+
+  .die {
+    font-size: 40px;  /* Reducir el tamaño de los dados en pantallas pequeñas */
+  }
+
+  #rollDiceButton {
+    font-size: 16px;  /* Ajustar tamaño del botón en pantallas pequeñas */
+  }
 }
