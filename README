@@ -6,7 +6,7 @@
 #CAMBIE LA ESTRUCTURA DE CARPETAS PARA QUE SEA MAS FACIL DE ENTENDER Y MANEJAR
 #POR QUE SE ME DIO LA GANA
 #ADEMAS DE QUE ASI SE VE MAS PROFESIONAL
-#ASI SE CA A QUEDAR ESTA MIERDA Y EL QUE ME CAMBIE ESTA COSA LO SACO DE MI EQUIPO
+#ASI SE VA A QUEDAR ESTA MIERDA Y EL QUE ME CAMBIE ESTA COSA LO SACO DE MI EQUIPO
 
 /monopoly-frontend/
 │
@@ -36,7 +36,7 @@
 │   │   ├── LoginView.html
 │   │   ├── RankingView.html
 │   │   └── SettingsView.html
-│   └── styles/
+│   └── css/
 │       ├── board.css
 │       ├── dados.css
 │       ├── index.css

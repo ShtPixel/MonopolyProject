@@ -1,6 +1,6 @@
 /* CSS/index.css */
         body {
-            background: url('../images/blabla.jpg') no-repeat center center;
+            background: url('/assets/images/blabla.jpg') no-repeat center center;
             min-height: 100vh;
             display: flex;
             align-items: center;

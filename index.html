@@ -5,15 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Monopoly - Menú de Inicio</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../Styles/CSS/index.css"> <!-- Esta línea une el CSS local -->
+    <link rel="stylesheet" href="src/css/index.css">
 </head>
 <body>
-    
     <div class="menu-container shadow-lg">
         <div class="monopoly-title">MONOPOLY</div>
-        <button class="btn btn-play btn-monopoly btn-lg w-100 mb-3" onclick="startGame()">Iniciar Juego</button>
-        <button class="btn btn-rules btn-monopoly btn-lg w-100 mb-3" onclick="showRules()">Reglas</button>
-        <button class="btn btn-exit btn-monopoly btn-lg w-100 mb-3" onclick="exitGame()">Salir</button>
+        <button class="btn btn-play btn-monopoly btn-lg w-100 mb-3" id="btn-play">Iniciar Juego</button>
+        <button class="btn btn-rules btn-monopoly btn-lg w-100 mb-3" id="btn-rules">Reglas</button>
+        <button class="btn btn-exit btn-monopoly btn-lg w-100 mb-3" id="btn-exit">Salir</button>
     </div>
 
     <!-- Modal para reglas -->
@@ -40,19 +39,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-
-        function showRules() {
-            var rulesModal = new bootstrap.Modal(document.getElementById('rulesModal'));
-            rulesModal.show();
-        }
-
-        function exitGame() {
-            // Puedes cerrar la ventana o mostrar un mensaje
-            if (confirm('¿Seguro que quieres salir?')) {
-                window.close();
-            }
-        }
-    </script>
+    <script src="src/controllers/index.js"></script>
 </body>
 </html>
