@@ -18,8 +18,9 @@
 
 /* ========== CUERPO PRINCIPAL ========== */
 body {
-  background: url('../../assets/images/monopoly-video-game-25icl4oi8y9lnmh7.jpg') center center/cover no-repeat;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: url("../../assets/images/monopoly-video-game-25icl4oi8y9lnmh7.jpg")
+    center center/cover no-repeat;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
   padding-top: 90px; /* Espacio para navbar fijo */
@@ -55,7 +56,12 @@ body {
 .monopoly-logo {
   font-size: 2.2rem;
   font-weight: 900;
-  background: linear-gradient(45deg, var(--monopoly-green), var(--monopoly-red), var(--monopoly-gold));
+  background: linear-gradient(
+    45deg,
+    var(--monopoly-green),
+    var(--monopoly-red),
+    var(--monopoly-gold)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -67,7 +73,7 @@ body {
 }
 
 .monopoly-logo::before {
-  content: '🏠';
+  content: "🏠";
   position: absolute;
   left: -35px;
   top: 50%;
@@ -82,9 +88,19 @@ body {
 }
 
 @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(-50%); }
-  40% { transform: translateY(-60%); }
-  60% { transform: translateY(-55%); }
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(-50%);
+  }
+  40% {
+    transform: translateY(-60%);
+  }
+  60% {
+    transform: translateY(-55%);
+  }
 }
 
 /* Navegación central */
@@ -122,13 +138,18 @@ body {
 }
 
 .nav-link-modern::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(30, 107, 71, 0.1), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(30, 107, 71, 0.1),
+    transparent
+  );
   transition: left 0.5s;
 }
 
@@ -144,7 +165,11 @@ body {
 }
 
 .nav-link-modern.active {
-  background: linear-gradient(135deg, var(--monopoly-green), var(--monopoly-dark-green));
+  background: linear-gradient(
+    135deg,
+    var(--monopoly-green),
+    var(--monopoly-dark-green)
+  );
   color: white;
   box-shadow: 0 4px 15px var(--shadow-color);
 }
@@ -225,7 +250,11 @@ body {
 }
 
 .search-btn {
-  background: linear-gradient(135deg, var(--monopoly-green), var(--monopoly-dark-green));
+  background: linear-gradient(
+    135deg,
+    var(--monopoly-green),
+    var(--monopoly-dark-green)
+  );
   color: white;
   border: none;
   border-radius: 25px;
@@ -280,11 +309,21 @@ body {
 }
 
 @keyframes roll {
-  0% { transform: rotate(0deg); }
-  25% { transform: rotate(90deg) scale(1.1); }
-  50% { transform: rotate(180deg) scale(1.2); }
-  75% { transform: rotate(270deg) scale(1.1); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(90deg) scale(1.1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.2);
+  }
+  75% {
+    transform: rotate(270deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .roll-btn {
@@ -330,13 +369,9 @@ body {
   text-align: center;
 }
 
-/* Debug input oculto */
+/* Debug input oculto por defecto, visible solo si se activa por JS */
 #debugDice {
-  position: absolute;
-  opacity: 0;
-  width: 1px;
-  height: 1px;
-  left: -9999px;
+  display: none;
 }
 
 /* Hamburger menu moderno */
@@ -527,15 +562,42 @@ body {
 }
 
 /* Posicionamiento de celdas laterales */
-.position-1-10 { grid-column: 1; grid-row: 10; }
-.position-1-9 { grid-column: 1; grid-row: 9; }
-.position-1-8 { grid-column: 1; grid-row: 8; }
-.position-1-7 { grid-column: 1; grid-row: 7; }
-.position-1-6 { grid-column: 1; grid-row: 6; }
-.position-1-5 { grid-column: 1; grid-row: 5; }
-.position-1-4 { grid-column: 1; grid-row: 4; }
-.position-1-3 { grid-column: 1; grid-row: 3; }
-.position-1-2 { grid-column: 1; grid-row: 2; }
+.position-1-10 {
+  grid-column: 1;
+  grid-row: 10;
+}
+.position-1-9 {
+  grid-column: 1;
+  grid-row: 9;
+}
+.position-1-8 {
+  grid-column: 1;
+  grid-row: 8;
+}
+.position-1-7 {
+  grid-column: 1;
+  grid-row: 7;
+}
+.position-1-6 {
+  grid-column: 1;
+  grid-row: 6;
+}
+.position-1-5 {
+  grid-column: 1;
+  grid-row: 5;
+}
+.position-1-4 {
+  grid-column: 1;
+  grid-row: 4;
+}
+.position-1-3 {
+  grid-column: 1;
+  grid-row: 3;
+}
+.position-1-2 {
+  grid-column: 1;
+  grid-row: 2;
+}
 
 /* Botón de volver mejorado */
 .back-button-container {
@@ -547,7 +609,11 @@ body {
 
 .back-btn {
   padding: 12px 25px;
-  background: linear-gradient(135deg, var(--monopoly-green), var(--monopoly-dark-green));
+  background: linear-gradient(
+    135deg,
+    var(--monopoly-green),
+    var(--monopoly-dark-green)
+  );
   color: white;
   font-size: 1rem;
   font-weight: bold;
@@ -561,7 +627,11 @@ body {
 }
 
 .back-btn:hover {
-  background: linear-gradient(135deg, var(--monopoly-dark-green), var(--monopoly-green));
+  background: linear-gradient(
+    135deg,
+    var(--monopoly-dark-green),
+    var(--monopoly-green)
+  );
   transform: translateY(-2px);
   box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
 }
@@ -734,10 +804,18 @@ body {
   animation: fadeInUp 0.6s ease forwards;
 }
 
-.nav-item:nth-child(1) { animation-delay: 0.1s; }
-.nav-item:nth-child(2) { animation-delay: 0.2s; }
-.nav-item:nth-child(3) { animation-delay: 0.3s; }
-.nav-item:nth-child(4) { animation-delay: 0.4s; }
+.nav-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.nav-item:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.nav-item:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.nav-item:nth-child(4) {
+  animation-delay: 0.4s;
+}
 
 /* Efectos de hover para celdas */
 .cell:hover {
