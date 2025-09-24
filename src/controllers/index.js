@@ -9,8 +9,7 @@ document.getElementById('btn-exit').addEventListener('click', function() {
     }
 });
 
-// Puedes agregar la lógica de "Iniciar Juego" aquí
+// Agregar evento al botón "Jugar"
 document.getElementById('btn-play').addEventListener('click', function() {
-    // Redirigir o iniciar el juego
-    // window.location.href = 'src/views/BoardView.html';
+    window.location.href = 'src/views/login.html';
 });

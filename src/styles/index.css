@@ -1,0 +1,20 @@
+@import 'common.css';
+
+.monopoly-title {
+    font-family: 'Impact', 'Arial Black', sans-serif;
+    color: var(--text-light);
+    letter-spacing: 2px;
+    font-size: 3rem;
+    margin-bottom: 24px;
+    text-shadow: 0px 0px 9px #000;
+    background-color: var(--danger-color);
+    border: var(--text-light) 4px solid;
+}
+
+.btn-rules {
+    background-color: var(--warning-color);
+}
+
+.btn-exit {
+    background-color: var(--danger-color);
+}

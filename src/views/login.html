@@ -3,43 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Monopoly - Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../Styles/CSS/login.css"> <!-- Esta línea une el CSS local -->
+    <link rel="stylesheet" href="../styles/login.css">
 </head>
 <body>
-
     <div class="menu-container">
-        <h2>Login</h2>
-        <form action="/login" method="POST">
-        <label for="username">Nick Name:</label>
-        <input type="text" id="username" name="username" class="form-control" placeholder="Enter your Nick Name" required>
-        <br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" class="form-control" placeholder="********" required>
-        <br>
-
-        <h4>Selecciona el color</h4>
-        <select id="color" name="color" class="form-select" required>
-            <option value="" disabled selected>Choose your color</option>
-            <option value="red">Red</option>
-            <option value="blue">Blue</option>
-            <option value="green">Green</option>
-            <option value="yellow">Yellow</option>
-        </select>
-        
-        <h4>Selecciona el tipo de ficha</h4>
-        <select id="token" name="token" class="form-select" required>
-            <option value="car">Car</option>
-            <option value="hat">Hat</option>
-            <option value="dog">Dog</option>
-            <option value="ship">Ship</option>
-        </select>
-        <button class="btn btn-play btn-monopoly btn-lg w-100 mb-3" href="../views/board.html">Iniciar Juego</button>
+        <h2 class="text-white mb-4">Login</h2>
+        <form id="loginForm" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="username" class="form-label text-white">Nick Name:</label>
+                <input type="text" id="username" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="country" class="form-label text-white">Country:</label>
+                <select id="country" class="form-select" required>
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="color" class="form-label text-white">Color:</label>
+                <select id="color" class="form-select" required>
+                    <option value="" disabled selected>Choose your color</option>
+                    <option value="red">Red</option>
+                    <option value="blue">Blue</option>
+                    <option value="green">Green</option>
+                    <option value="yellow">Yellow</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="token" class="form-label text-white">Token:</label>
+                <select id="token" class="form-select" required>
+                    <option value="car">Car</option>
+                    <option value="hat">Hat</option>
+                    <option value="dog">Dog</option>
+                    <option value="ship">Ship</option>
+                </select>
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-play btn-monopoly btn-lg w-100">
+                    Start Game
+                </button>
+                <button type="button" class="btn btn-exit btn-monopoly btn-lg w-100 mt-3" onclick="window.location.href='../../index.html'">
+                    Back to Menu
+                </button>
+            </div>
+        </form>
     </div>
-
-    <div>
-
-    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../controllers/login.js"></script>
 </body>
 </html>
