@@ -19,8 +19,8 @@
 │
 │
 ├── src/
-│   ├── components/
-│   │   └── (componentes reutilizables JS/HTML, ej: dado, ficha, modal, etc.)
+│   ├
+│   │  
 │   ├── controllers/
 │   │   ├── App.js
 │   │   ├── board.js
