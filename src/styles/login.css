@@ -3,10 +3,37 @@
 /* Login specific styles */
 .form-label {
     color: var(--text-light);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.form-control,
+.form-select {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-light);
+    border-radius: var(--border-radius);
+    padding: 12px;
+    transition: all var(--transition-speed) ease;
 }
 
 .form-control:focus,
 .form-select:focus {
+    background-color: rgba(255, 255, 255, 0.15);
     border-color: var(--primary-color);
     box-shadow: 0 0 0 0.25rem rgba(67, 206, 162, 0.25);
+    color: var(--text-light);
+}
+
+.form-select option {
+    background-color: #2c3e50;
+    color: var(--text-light);
+}
+
+/* Estilo para mensajes de error */
+.invalid-feedback {
+    color: var(--danger-color);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
 }
