@@ -38,7 +38,7 @@ class LoginController {
     populateCountrySelect(countries) {
         const defaultOption = document.createElement('option');
         defaultOption.value = '';
-        defaultOption.textContent = 'Choose your country';
+        defaultOption.textContent = 'Elegir un país';
         defaultOption.disabled = true;
         defaultOption.selected = true;
         this.countrySelect.appendChild(defaultOption);
