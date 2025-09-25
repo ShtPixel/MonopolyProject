@@ -11,51 +11,177 @@
 </head>
 <body>
     <div class="menu-container">
-        <h2 class="text-white mb-4">Inicio</h2>
-        <form id="loginForm" class="needs-validation" novalidate>
-            <div class="mb-3">
-                <label for="username" class="form-label text-white">Nombre:</label>
-                <input type="text" id="username" class="form-control" required>
-                <div class="invalid-feedback">
-                    Por favor ingrsar un nombre valido
-                </div>
+        <h2 class="text-white mb-3">Registro de Jugadores</h2>
+        <div class="players-container">
+            <!-- Jugador 1 -->
+            <div class="player-form mb-4">
+                <h4 class="text-white">Jugador 1</h4>
+                <form id="loginForm1" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="username1" class="form-label text-white">Nombre:</label>
+                        <input type="text" id="username1" class="form-control" required>
+                        <div class="invalid-feedback">
+                            Por favor ingrsar un nombre valido
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="country1" class="form-label text-white">Pais:</label>
+                        <select id="country1" class="form-select" required>
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="color1" class="form-label text-white">Color:</label>
+                        <select id="color1" class="form-select" required>
+                            <option value="" disabled selected>Elegir Color</option>
+                            <option value="red">Rojo</option>
+                            <option value="blue">Azul</option>
+                            <option value="green">Verde</option>
+                            <option value="yellow">Amarillo</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="token1" class="form-label text-white">Ficha:</label>
+                        <select id="token1" class="form-select" required>
+                            <option value="" disabled selected>Elegir Ficha</option>
+                            <option value="car">Auto</option>
+                            <option value="hat">Sombrero</option>
+                            <option value="dog">Perro</option>
+                            <option value="ship">Bote</option>
+                        </select>
+                    </div>
+                </form>
             </div>
-            <div class="mb-3">
-                <label for="country" class="form-label text-white">Pais:</label>
-                <select id="country" class="form-select" required>
-                    <!-- Options will be populated by JavaScript -->
-                </select>
+
+            <!-- Jugador 2 -->
+            <div class="player-form mb-4">
+                <h4 class="text-white">Jugador 2</h4>
+                <form id="loginForm2" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="username2" class="form-label text-white">Nombre:</label>
+                        <input type="text" id="username2" class="form-control" required>
+                        <div class="invalid-feedback">
+                            Por favor ingrsar un nombre valido
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="country2" class="form-label text-white">Pais:</label>
+                        <select id="country2" class="form-select" required>
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="color2" class="form-label text-white">Color:</label>
+                        <select id="color2" class="form-select" required>
+                            <option value="" disabled selected>Elegir Color</option>
+                            <option value="red">Rojo</option>
+                            <option value="blue">Azul</option>
+                            <option value="green">Verde</option>
+                            <option value="yellow">Amarillo</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="token2" class="form-label text-white">Ficha:</label>
+                        <select id="token2" class="form-select" required>
+                            <option value="" disabled selected>Elegir Ficha</option>
+                            <option value="car">Auto</option>
+                            <option value="hat">Sombrero</option>
+                            <option value="dog">Perro</option>
+                            <option value="ship">Bote</option>
+                        </select>
+                    </div>
+                </form>
             </div>
-            <div class="mb-3">
-                <label for="color" class="form-label text-white">Color:</label>
-                <select id="color" class="form-select" required>
-                    <option value="" disabled selected>Elegir Color</option>
-                    <option value="red">Rojo</option>
-                    <option value="blue">Azul</option>
-                    <option value="green">Verde</option>
-                    <option value="yellow">Amarillo</option>
-                </select>
+
+            <!-- Jugador 3 -->
+            <div class="player-form mb-4">
+                <h4 class="text-white">Jugador 3</h4>
+                <form id="loginForm3" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="username3" class="form-label text-white">Nombre:</label>
+                        <input type="text" id="username3" class="form-control" required>
+                        <div class="invalid-feedback">
+                            Por favor ingrsar un nombre valido
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="country3" class="form-label text-white">Pais:</label>
+                        <select id="country3" class="form-select" required>
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="color3" class="form-label text-white">Color:</label>
+                        <select id="color3" class="form-select" required>
+                            <option value="" disabled selected>Elegir Color</option>
+                            <option value="red">Rojo</option>
+                            <option value="blue">Azul</option>
+                            <option value="green">Verde</option>
+                            <option value="yellow">Amarillo</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="token3" class="form-label text-white">Ficha:</label>
+                        <select id="token3" class="form-select" required>
+                            <option value="" disabled selected>Elegir Ficha</option>
+                            <option value="car">Auto</option>
+                            <option value="hat">Sombrero</option>
+                            <option value="dog">Perro</option>
+                            <option value="ship">Bote</option>
+                        </select>
+                    </div>
+                </form>
             </div>
-            <div class="mb-3">
-                <label for="token" class="form-label text-white">Ficha:</label>
-                <select id="token" class="form-select" required>
-                    <option value="" disabled selected>Elegir Ficha</option>
-                    <option value="car">Auto</option>
-                    <option value="hat">Sombrero</option>
-                    <option value="dog">Perro</option>
-                    <option value="ship">Bote</option>
-                </select>
+
+            <!-- Jugador 4 -->
+            <div class="player-form mb-4">
+                <h4 class="text-white">Jugador 4</h4>
+                <form id="loginForm4" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="username4" class="form-label text-white">Nombre:</label>
+                        <input type="text" id="username4" class="form-control" required>
+                        <div class="invalid-feedback">
+                            Por favor ingrsar un nombre valido
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="country4" class="form-label text-white">Pais:</label>
+                        <select id="country4" class="form-select" required>
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="color4" class="form-label text-white">Color:</label>
+                        <select id="color4" class="form-select" required>
+                            <option value="" disabled selected>Elegir Color</option>
+                            <option value="red">Rojo</option>
+                            <option value="blue">Azul</option>
+                            <option value="green">Verde</option>
+                            <option value="yellow">Amarillo</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="token4" class="form-label text-white">Ficha:</label>
+                        <select id="token4" class="form-select" required>
+                            <option value="" disabled selected>Elegir Ficha</option>
+                            <option value="car">Auto</option>
+                            <option value="hat">Sombrero</option>
+                            <option value="dog">Perro</option>
+                            <option value="ship">Bote</option>
+                        </select>
+                    </div>
+                </form>
             </div>
-            <div class="mt-4">
-                <button type="submit" class="btn btn-play btn-monopoly btn-lg w-100">
-                    Iniciar Juego
-                </button>
-                <button type="button" class="btn btn-exit btn-monopoly btn-lg w-100 mt-3" onclick="window.location.href='../../index.html'">
-                    Volver al Inicio
-                </button>
-            </div>
-        </form>
-        <div id="error-container"></div>
+        </div>
+        
+        <div class="mt-3">
+            <button type="button" id="startGame" class="btn btn-play btn-monopoly btn-lg w-100" disabled>
+                Iniciar Juego
+            </button>
+            <button type="button" class="btn btn-exit btn-monopoly btn-lg w-100 mt-2" onclick="window.location.href='../../index.html'">
+                Volver al Inicio
+            </button>
+        </div>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

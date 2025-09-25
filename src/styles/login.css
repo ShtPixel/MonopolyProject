@@ -29,3 +29,77 @@
     font-size: 0.875rem;
     margin-top: 0.25rem;
 }
+
+.players-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+.player-form {
+    flex: 1;
+    min-width: 250px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+}
+
+/* Ajustar el contenedor principal */
+.menu-container {
+    max-width: 1200px; /* Aumentar el ancho máximo */
+    width: 95%;
+    padding: 2rem;
+    margin: 1rem;
+}
+
+/* Ajustar tamaños de los campos para mejor distribución */
+.form-control,
+.form-select {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+}
+
+.form-label {
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+}
+
+.player-form h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+}
+
+/* Eliminar estilos de scroll que ya no son necesarios */
+.players-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Ajustar espaciado entre campos */
+.mb-3 {
+    margin-bottom: 0.8rem !important;
+}
+
+/* Media query para pantallas pequeñas */
+@media (max-width: 1200px) {
+    .players-container {
+        flex-wrap: wrap;
+    }
+    
+    .player-form {
+        flex: 1 1 calc(50% - 1rem);
+        min-width: calc(50% - 1rem);
+    }
+}
+
+@media (max-width: 768px) {
+    .players-container {
+        flex-direction: column;
+    }
+    
+    .player-form {
+        width: 100%;
+    }
+}

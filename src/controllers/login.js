@@ -1,13 +1,16 @@
 class LoginController {
     constructor() {
-        this.form = document.getElementById('loginForm');
-        this.countrySelect = document.getElementById('country');
+        this.forms = Array.from({ length: 4 }, (_, i) => document.getElementById(`loginForm${i + 1}`));
+        this.startButton = document.getElementById('startGame');
         this.initializeEventListeners();
         this.loadCountries();
     }
 
     initializeEventListeners() {
-        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+        this.forms.forEach(form => {
+            form.addEventListener('change', () => this.validateAllForms());
+        });
+        this.startButton.addEventListener('click', () => this.handleGameStart());
     }
 
     async loadCountries() {
@@ -15,80 +18,68 @@ class LoginController {
             const response = await fetch('http://localhost:5000/countries');
             const countries = await response.json();
             
-            // Convertir el array de objetos a un array de {id, name}
             const formattedCountries = countries.reduce((acc, country) => {
                 const [code, name] = Object.entries(country)[0];
-                acc.push({
-                    id: code,
-                    name: name
-                });
+                acc.push({ id: code, name: name });
                 return acc;
             }, []);
             
-            // Ordenar países alfabéticamente por nombre
             formattedCountries.sort((a, b) => a.name.localeCompare(b.name));
             
-            this.populateCountrySelect(formattedCountries);
+            this.forms.forEach(form => this.populateCountrySelect(form, formattedCountries));
         } catch (error) {
             console.error('Error loading countries:', error);
             alert('Error loading countries. Please try again later.');
         }
     }
 
-    populateCountrySelect(countries) {
+    validateAllForms() {
+        const filledForms = this.forms.filter(form => this.isFormFilled(form));
+        this.startButton.disabled = filledForms.length < 2;
+    }
+
+    isFormFilled(form) {
+        const formData = this.getFormData(form);
+        return Object.values(formData).every(value => value !== '');
+    }
+
+    getFormData(form) {
+        return {
+            username: form.querySelector('[id^="username"]').value.trim(),
+            country: form.querySelector('[id^="country"]').value,
+            color: form.querySelector('[id^="color"]').value,
+            token: form.querySelector('[id^="token"]').value
+        };
+    }
+
+    handleGameStart() {
+        const players = this.forms
+            .map(form => this.getFormData(form))
+            .filter(data => Object.values(data).every(value => value !== ''));
+
+        if (players.length >= 2) {
+            localStorage.setItem('playersData', JSON.stringify(players));
+            window.location.href = 'board.html';
+        }
+    }
+
+    populateCountrySelect(form, countries) {
+        const countrySelect = form.querySelector('[id^="country"]');
+        countrySelect.innerHTML = ''; // Clear existing options
+
         const defaultOption = document.createElement('option');
         defaultOption.value = '';
         defaultOption.textContent = 'Elegir un país';
         defaultOption.disabled = true;
         defaultOption.selected = true;
-        this.countrySelect.appendChild(defaultOption);
+        countrySelect.appendChild(defaultOption);
 
         countries.forEach(country => {
             const option = document.createElement('option');
             option.value = country.id;
             option.textContent = country.name;
-            this.countrySelect.appendChild(option);
+            countrySelect.appendChild(option);
         });
-    }
-
-    handleSubmit(e) {
-        e.preventDefault();
-        
-        try {
-            const userData = this.getUserData();
-            if (this.validateForm(userData)) {
-                this.saveUserData(userData);
-                this.redirectToGame();
-            }
-        } catch (error) {
-            console.error('Error in form submission:', error);
-            alert('An error occurred. Please try again.');
-        }
-    }
-
-    getUserData() {
-        return {
-            username: document.getElementById('username').value.trim(),
-            country: document.getElementById('country').value,
-            color: document.getElementById('color').value,
-            token: document.getElementById('token').value
-        };
-    }
-
-    validateForm(data) {
-        if (!data.username || !data.country || !data.color || !data.token) {
-            alert('Please fill in all fields');
-            return false;
-        }
-        return true;
-    }
-
-    saveUserData(userData) {
-        localStorage.setItem('userData', JSON.stringify(userData));
-    }
-
-    redirectToGame() {
-        window.location.href = 'board.html';
     }
 }
 
