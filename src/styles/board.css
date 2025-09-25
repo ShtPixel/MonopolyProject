@@ -1,4 +1,4 @@
-/* ========== VARIABLES Y RESET ========== */
+/* ========== VARIABLES Y RESET  ========== */
 :root {
   --monopoly-green: #1e6b47;
   --monopoly-red: #d32f2f;
@@ -7,7 +7,7 @@
   --monopoly-light: #f8f9fa;
   --shadow-color: rgba(30, 107, 71, 0.15);
   
-  /* Colores auténticos del Monopoly */
+  /*Colores auténticos del Monopoly */
   --brown-color: #8B4513;
   --light-blue-color: #87CEEB;
   --pink-color: #FF69B4;
