@@ -134,19 +134,94 @@
     margin-left: 0;
   }
   .die {
-    font-size: 1.5rem;
-    padding: 6px 10px;
-    min-width: 28px;
+    font-size: 1.8rem;
+    padding: 8px 14px;
+    min-width: 40px;
+  }
+  .die-svg {
+    width: 40px;
+    height: 40px;
   }
   #rollDiceButton {
-    font-size: 0.95rem;
-    padding: 6px 10px;
+    font-size: 0.9rem;
+    padding: 8px 14px;
+  }
+  .debug-dice-input {
+    width: 80px;
+    font-size: 0.9rem;
+    padding: 6px 8px;
+  }
+  .sum-label {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-dice {
+    gap: 6px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 8px;
+  }
+  .die {
+    font-size: 1.6rem;
+    padding: 6px 12px;
+    min-width: 36px;
+  }
+  .die-svg {
+    width: 36px;
+    height: 36px;
+  }
+  #rollDiceButton {
+    font-size: 0.85rem;
+    padding: 6px 12px;
   }
   .debug-dice-input {
     width: 70px;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
+    padding: 4px 6px;
   }
   .sum-label {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-dice {
+    gap: 4px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .die {
+    font-size: 1.4rem;
+    padding: 4px 8px;
+    min-width: 30px;
+  }
+  .die-svg {
+    width: 30px;
+    height: 30px;
+  }
+  #rollDiceButton {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+  }
+  .debug-dice-input {
+    width: 60px;
+    font-size: 0.8rem;
+    padding: 4px;
+  }
+  .sum-label {
+    font-size: 0.85rem;
+    margin-left: 5px;
+  }
+  
+  /* Reorganizar elementos en móviles */
+  .navbar-collapse {
+    text-align: center;
+  }
+  
+  .navbar-nav {
+    justify-content: center;
+    margin-bottom: 10px;
   }
 }

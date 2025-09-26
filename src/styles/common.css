@@ -55,3 +55,53 @@ body {
 .btn-play {
     background-color: var(--primary-color);
 }
+
+/* Monopoly Navbar Styles */
+.monopoly-navbar {
+    background: linear-gradient(135deg, var(--primary-color), #185a9d) !important;
+    border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.monopoly-navbar .navbar-brand,
+.monopoly-navbar .nav-link {
+    color: var(--text-light) !important;
+    transition: all var(--transition-speed) ease;
+}
+
+.monopoly-navbar .nav-link:hover {
+    color: var(--warning-color) !important;
+    transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .menu-container {
+        padding: 1.5rem;
+        max-width: 350px;
+        margin: 20px;
+    }
+    
+    .btn-monopoly {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+    
+    body {
+        background-attachment: scroll;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-container {
+        padding: 1rem;
+        max-width: 300px;
+        margin: 15px;
+    }
+    
+    .btn-monopoly {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+        margin: 6px 0;
+    }
+}
