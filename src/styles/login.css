@@ -103,3 +103,44 @@
         width: 100%;
     }
 }
+
+/* Agregar estos estilos */
+.color-options {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+.color-radio {
+    display: none;
+}
+
+.color-label {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.color-label:hover {
+    transform: scale(1.1);
+}
+
+.color-radio:checked + .color-label {
+    border: 2px solid #fff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.color-radio:disabled + .color-label {
+    opacity: 0.2;
+    cursor: not-allowed;
+}
+
+/* Colores específicos */
+.red { background-color: #ff4444; }
+.blue { background-color: #3498db; }
+.green { background-color: #2ecc71; }
+.yellow { background-color: #f1c40f; }

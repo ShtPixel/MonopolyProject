@@ -4,6 +4,7 @@ class LoginController {
         this.startButton = document.getElementById('startGame');
         this.initializeEventListeners();
         this.loadCountries();
+        this.setupColorSelectionHandlers();
     }
 
     initializeEventListeners() {
@@ -43,12 +44,55 @@ class LoginController {
         return Object.values(formData).every(value => value !== '');
     }
 
+    setupColorSelectionHandlers() {
+        const colorRadios = document.querySelectorAll('.color-radio');
+        colorRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (radio.checked) {
+                    this.updateAvailableColors();
+                }
+                this.validateAllForms();
+            });
+        });
+    }
+
+    updateAvailableColors() {
+        // Primero, habilitamos todos los colores
+        const allColorRadios = document.querySelectorAll('.color-radio');
+        allColorRadios.forEach(radio => {
+            radio.disabled = false;
+        });
+
+        // Luego, obtenemos los colores seleccionados
+        const selectedColors = new Set();
+        this.forms.forEach(form => {
+            const selectedRadio = form.querySelector('.color-radio:checked');
+            if (selectedRadio) {
+                selectedColors.add(selectedRadio.value);
+            }
+        });
+
+        // Finalmente, deshabilitamos los colores ya seleccionados
+        allColorRadios.forEach(radio => {
+            if (selectedColors.has(radio.value) && !radio.checked) {
+                radio.disabled = true;
+            }
+        });
+    }
+
+    resetColorSelection() {
+        const allColorRadios = document.querySelectorAll('.color-radio');
+        allColorRadios.forEach(radio => {
+            radio.disabled = false;
+            radio.checked = false;
+        });
+    }
+
     getFormData(form) {
         return {
             username: form.querySelector('[id^="username"]').value.trim(),
             country: form.querySelector('[id^="country"]').value,
-            color: form.querySelector('[id^="color"]').value,
-            token: form.querySelector('[id^="token"]').value
+            color: form.querySelector('.color-radio:checked')?.value || ''
         };
     }
 
