@@ -87,6 +87,45 @@
   font-size: 1.1rem;
 }
 
+.die-svg {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  margin-right: 2px;
+  transition: transform 0.2s;
+  border: 2px solid var(--primary-color, #43cea2);
+}
+
+.die-svg.animate {
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  20% {
+    transform: rotate(-20deg) scale(1.1);
+  }
+  40% {
+    transform: rotate(20deg) scale(1.1);
+  }
+  60% {
+    transform: rotate(-10deg) scale(1.05);
+  }
+  80% {
+    transform: rotate(10deg) scale(1.05);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
 /* Responsive */
 @media (max-width: 992px) {
   .navbar-dice {

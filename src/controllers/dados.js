@@ -60,12 +60,16 @@ document.addEventListener("DOMContentLoaded", function () {
       if (val2 < 1 || val2 > 6) val2 = Math.max(1, Math.min(6, suma - val1));
       die1.textContent = val1;
       die2.textContent = val2;
+      renderDieSVG(document.getElementById("die1"), val1);
+      renderDieSVG(document.getElementById("die2"), val2);
     } else {
       const val1 = Math.floor(Math.random() * 6) + 1;
       const val2 = Math.floor(Math.random() * 6) + 1;
       suma = val1 + val2;
       die1.textContent = val1;
       die2.textContent = val2;
+      renderDieSVG(document.getElementById("die1"), val1);
+      renderDieSVG(document.getElementById("die2"), val2);
     }
 
     animateDice();
@@ -81,4 +85,48 @@ document.addEventListener("DOMContentLoaded", function () {
   debugDice.addEventListener("keydown", function (e) {
     if (e.key === "Enter") rollDice();
   });
+
+  function renderDieSVG(container, value) {
+    const dots = [
+      [],
+      [[24, 24]],
+      [
+        [12, 12],
+        [36, 36],
+      ],
+      [
+        [12, 12],
+        [24, 24],
+        [36, 36],
+      ],
+      [
+        [12, 12],
+        [12, 36],
+        [36, 12],
+        [36, 36],
+      ],
+      [
+        [12, 12],
+        [12, 36],
+        [24, 24],
+        [36, 12],
+        [36, 36],
+      ],
+      [
+        [12, 12],
+        [12, 24],
+        [12, 36],
+        [36, 12],
+        [36, 24],
+        [36, 36],
+      ],
+    ];
+    let svg = `<svg width="48" height="48" viewBox="0 0 48 48">`;
+    svg += `<rect x="2" y="2" width="44" height="44" rx="10" fill="#fff" stroke="#43cea2" stroke-width="3"/>`;
+    dots[value].forEach(([cx, cy]) => {
+      svg += `<circle cx="${cx}" cy="${cy}" r="4.5" fill="#222"/>`;
+    });
+    svg += `</svg>`;
+    container.innerHTML = svg;
+  }
 });
