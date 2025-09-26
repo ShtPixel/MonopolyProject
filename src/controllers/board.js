@@ -10,8 +10,8 @@ class BoardController {
     getCornerSpace(row, col) {
         if (row === 10 && col === 10) return this.boardData.bottom[0];    // GO (Salida)
         if (row === 10 && col === 0) return this.boardData.left[0];       // Jail
-        if (row === 0 && col === 10) return this.boardData.left[10];         // Free Parking
-        if (row === 0 && col === 0) return this.boardData.top[9];      // Go to Jail
+        if (row === 0 && col === 0) return this.boardData.left[10];         // Free Parking
+        if (row === 0 && col === 10) return this.boardData.top[9];      // Go to Jail
         return null;
     }
 
