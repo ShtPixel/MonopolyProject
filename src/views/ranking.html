@@ -1,37 +1,69 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ranking Monopoly</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- CSS personalizado -->
-  <link rel="stylesheet" href="../styles/ranking.css">
-  <!-- JS del ranking -->
-  <script src="../controllers/ranking.js" defer></script>
-</head>
-<body>
-  <!-- Navbar simple -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="../../index.html">MONOPOLY</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item"><a class="nav-link" href="../../index.html">Inicio</a></li>
-          <li class="nav-item"><a class="nav-link" href="../views/board.html">Tablero</a></li>
-        </ul>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ranking Monopoly</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="../styles/ranking.css" />
+    <!-- JS del ranking -->
+    <script src="../controllers/ranking.js" defer></script>
+  </head>
+  <body>
+    <!-- Navbar simple -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../../index.html">MONOPOLY</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../../index.html">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../views/board.html">Tablero</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenedor del ranking -->
+    <div class="container mt-4">
+      <div id="rankingContainer" class="ranking-container">
+        <div class="ranking-title mb-4">Ranking de Jugadores</div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle ranking-table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Jugador</th>
+                <th scope="col">Puntaje</th>
+                <th scope="col">País</th>
+                <th scope="col">Bandera</th>
+              </tr>
+            </thead>
+            <tbody id="rankingBody">
+              <!-- Aquí se insertan las filas del ranking por JS -->
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </nav>
-
-  <!-- Contenedor del ranking -->
-  <div class="container mt-4">
-    <h2>Ranking de Jugadores</h2>
-    <div id="rankingContainer" class="ranking"></div>
-  </div>
-</body>
+  </body>
 </html>

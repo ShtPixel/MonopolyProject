@@ -1,55 +1,52 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Contenedor del ranking
-  const rankingContainer = document.getElementById("rankingContainer");
+  // Selecciona el tbody de la tabla
+  const rankingBody = document.getElementById("rankingBody");
 
-  // Función para cargar y renderizar el ranking
   function cargarRanking() {
-    // 1️⃣ Obtener ranking de jugadores desde el backend
     fetch("http://127.0.0.1:5000/ranking")
       .then((response) => response.json())
       .then(async (players) => {
-        // 2️⃣ Obtener nombres de países desde el backend
         const resCountries = await fetch("http://127.0.0.1:5000/countries");
         const paisesArray = await resCountries.json();
 
-        // Convertir array de países a un objeto para búsqueda rápida
+        // Mapea los países para búsqueda rápida
         const paisesMap = {};
         paisesArray.forEach((p) => {
           const key = Object.keys(p)[0];
           paisesMap[key] = p[key];
         });
 
-        // Limpiar ranking previo
-        rankingContainer.innerHTML = "";
+        // Limpia el ranking previo
+        rankingBody.innerHTML = "";
 
-        // Ordenar jugadores por puntaje descendente
+        // Ordena jugadores por puntaje descendente
         players.sort((a, b) => b.score - a.score);
 
-        // Renderizar cada jugador
+        // Renderiza cada jugador como fila de tabla
         players.forEach((player, index) => {
           const countryName =
             paisesMap[player.country_code] || player.country_code;
+          let rankClass = "";
+          if (index === 0) rankClass = "rank-1";
+          else if (index === 1) rankClass = "rank-2";
+          else if (index === 2) rankClass = "rank-3";
 
-          const row = document.createElement("div");
-          row.className = "ranking-row";
-          row.innerHTML = `
-            <span class="rank">${index + 1}</span>
-            <span class="nickname">${player.nick_name}</span>
-            <span class="score">${player.score}</span>
-            <span class="country">
-              <img src="https://flagsapi.com/${player.country_code.toUpperCase()}/shiny/64.png" alt="${countryName}">
-            </span>
-            <span class="country-name">${countryName}</span>
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <th class="rank ${rankClass}" scope="row">${index + 1}</th>
+            <td class="nickname">${player.nick_name}</td>
+            <td class="score">${player.score}</td>
+            <td class="country-name">${countryName}</td>
+            <td>
+              <img src="https://flagsapi.com/${player.country_code.toUpperCase()}/shiny/64.png" alt="${countryName}" class="img-fluid">
+            </td>
           `;
-          rankingContainer.appendChild(row);
+          rankingBody.appendChild(tr);
         });
       })
       .catch((error) => console.error("Error al cargar el ranking:", error));
   }
 
-  // Cargar ranking al inicio
   cargarRanking();
-
-  // Opcional: Exponer función global si quieres recargar desde un botón
   window.cargarRanking = cargarRanking;
 });
