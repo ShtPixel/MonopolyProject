@@ -3,52 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ranking Monopoly</title>
-    <!-- Bootstrap CSS -->
+    <title>Monopoly - Ranking</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <!-- CSS personalizado -->
     <link rel="stylesheet" href="../styles/ranking.css" />
-    <!-- JS del ranking -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/png" href="../../assets/images/favicon.png" />
     <script src="../controllers/ranking.js" defer></script>
   </head>
   <body>
-    <!-- Navbar simple -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="../../index.html">MONOPOLY</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="../../index.html">Inicio</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="../views/board.html">Tablero</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Contenedor del ranking -->
-    <div class="container mt-4">
-      <div id="rankingContainer" class="ranking-container">
-        <div class="ranking-title mb-4">Ranking de Jugadores</div>
+    <div class="menu-container">
+      <h2 class="ranking-title mb-4">Ranking de Jugadores</h2>
+      <div id="rankingContainer">
         <div class="table-responsive">
-          <table class="table table-hover align-middle ranking-table">
+          <table class="table ranking-table align-middle mb-0">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -59,11 +32,28 @@
               </tr>
             </thead>
             <tbody id="rankingBody">
-              <!-- Aquí se insertan las filas del ranking por JS -->
+              <!-- Filas generadas por JS -->
             </tbody>
           </table>
         </div>
+        <div class="mt-4 d-flex flex-column gap-3">
+          <button
+            type="button"
+            class="btn btn-monopoly btn-lg w-100"
+            onclick="window.location.href='../../index.html'"
+          >
+            Volver al Inicio
+          </button>
+          <button
+            type="button"
+            class="btn btn-monopoly btn-lg w-100"
+            onclick="window.location.href='board.html'"
+          >
+            Ir al Tablero
+          </button>
+        </div>
       </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
