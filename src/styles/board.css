@@ -229,6 +229,112 @@
   background-color: #dcdcdc;
 }
 
+/* Estilos para fichas de jugadores */
+.player-piece {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+  color: white;
+  margin: 1px;
+  z-index: 10;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.players-container {
+  display: flex;
+  flex-wrap: wrap;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  gap: 2px;
+  z-index: 10;
+}
+
+.player-icon {
+  font-size: 8px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* Panel de información de jugadores */
+.player-info-panel {
+  position: fixed;
+  top: 100px;
+  right: 20px;
+  width: 280px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  padding: 15px;
+  z-index: 1000;
+}
+
+.player-info-panel h3 {
+  margin: 0 0 15px 0;
+  color: #2c3e50;
+  font-size: 18px;
+  text-align: center;
+}
+
+.player-info-card {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+}
+
+.player-info-card.active {
+  background: #e3f2fd;
+  transform: scale(1.02);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.player-name {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.player-details {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.current-player-indicator {
+  background: #4caf50;
+  color: white;
+  padding: 8px;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Mensaje de juego */
+.game-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0,0,0,0.8);
+  color: white;
+  padding: 20px 30px;
+  border-radius: 10px;
+  font-size: 16px;
+  z-index: 2000;
+  display: none;
+}
+
 /* Media Queries para Responsividad */
 @media (max-width: 768px) {
   .board-container {

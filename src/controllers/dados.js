@@ -31,15 +31,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function moverFichaJugadorActual(suma) {
-    const jugador = window.jugadores[window.jugadorActual];
-    jugador.position = (jugador.position + suma) % totalCasillas;
-    if (typeof window.renderFicha === "function") {
-      window.renderFicha(jugador);
-    } else {
-      console.log(
-        `${jugador.nombre} se mueve a la casilla ${jugador.position}`
-      );
-    }
+    // Esta función ahora es manejada por el sistema Game
+    // Solo mantenemos el log para compatibilidad
+    console.log(`Dice rolled: ${suma} - Movement handled by Game controller`);
   }
 
   // Función para lanzar los dados y mostrar el resultado
@@ -75,7 +69,8 @@ document.addEventListener("DOMContentLoaded", function () {
     animateDice();
     sumLabel.textContent = "Suma: " + suma;
     moverFichaJugadorActual(suma);
-    window.jugadorActual = (window.jugadorActual + 1) % window.jugadores.length;
+    // El cambio de turno ahora lo maneja el sistema Game
+    console.log(`Dice sum: ${suma} - Turn management handled by Game controller`);
   }
 
   // Asignar el evento de clic al botón "Lanzar Dados"

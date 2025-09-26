@@ -85,6 +85,11 @@ class Player {
     }
 
     getSpaceElement(position) {
+        // Usar BoardMapper para obtener la celda visual
+        if (window.BoardMapper) {
+            return window.BoardMapper.getCellElement(position);
+        }
+        // Fallback por compatibilidad
         return document.getElementById(`cell-${position}`);
     }
 

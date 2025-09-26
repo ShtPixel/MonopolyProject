@@ -42,11 +42,13 @@ class BoardController {
     }
 
     initializeBoard() {
+        // Crear la cuadrícula 11x11 primero
         for (let i = 0; i < 121; i++) {
             const cell = document.createElement('div');
             const row = Math.floor(i / 11);
             const col = i % 11;
-            if (row === 0 || row === 10 || col === 0 || col === 10) {
+            let isBorde = (row === 0 || row === 10 || col === 0 || col === 10);
+            if (isBorde) {
                 cell.className = 'space';
                 if (this.isCorner(row, col)) {
                     cell.classList.add('corner');
@@ -62,6 +64,40 @@ class BoardController {
             }
             this.boardElement.appendChild(cell);
         }
+        
+        // Asignar IDs en el orden correcto del Monopoly (sentido horario desde GO)
+        this.assignLogicalIds();
+    }
+    
+    assignLogicalIds() {
+        // Orden correcto del Monopoly: GO (esquina inferior derecha) -> sentido horario
+        const boardOrder = [
+            // Esquina GO (bottom-right)
+            { row: 10, col: 10, id: 0 },
+            // Bottom side (derecha a izquierda)
+            ...Array.from({ length: 9 }, (_, i) => ({ row: 10, col: 9 - i, id: i + 1 })),
+            // Esquina Jail (bottom-left)
+            { row: 10, col: 0, id: 10 },
+            // Left side (abajo hacia arriba)
+            ...Array.from({ length: 9 }, (_, i) => ({ row: 9 - i, col: 0, id: i + 11 })),
+            // Esquina Free Parking (top-left)
+            { row: 0, col: 0, id: 20 },
+            // Top side (izquierda a derecha)
+            ...Array.from({ length: 9 }, (_, i) => ({ row: 0, col: i + 1, id: i + 21 })),
+            // Esquina Go to Jail (top-right)
+            { row: 0, col: 10, id: 30 },
+            // Right side (arriba hacia abajo)
+            ...Array.from({ length: 9 }, (_, i) => ({ row: i + 1, col: 10, id: i + 31 }))
+        ];
+        
+        // Asignar IDs según el orden lógico
+        boardOrder.forEach(({ row, col, id }) => {
+            const cellIndex = row * 11 + col;
+            const cell = this.boardElement.children[cellIndex];
+            if (cell && cell.classList.contains('space')) {
+                cell.id = `cell-${id}`;
+            }
+        });
     }
 
     isCorner(row, col) {
@@ -151,8 +187,37 @@ class BoardController {
         }
         return content;
     }
+    
+    // Método para obtener información de una casilla por posición lógica
+    getSpaceByPosition(position) {
+        if (!this.boardData) return null;
+        
+        // Mapear posición lógica (0-39) a la data del tablero
+        if (position === 0) {
+            return this.boardData.bottom[0]; // GO
+        } else if (position >= 1 && position <= 9) {
+            return this.boardData.bottom[position]; // Bottom side
+        } else if (position === 10) {
+            return this.boardData.left[0]; // Jail
+        } else if (position >= 11 && position <= 19) {
+            return this.boardData.left[position - 10]; // Left side
+        } else if (position === 20) {
+            return this.boardData.top[9]; // Free Parking (last in top array)
+        } else if (position >= 21 && position <= 29) {
+            return this.boardData.top[29 - position]; // Top side (reversed)
+        } else if (position === 30) {
+            return this.boardData.right[9]; // Go to Jail (last in right array)
+        } else if (position >= 31 && position <= 39) {
+            return this.boardData.right[39 - position]; // Right side (reversed)
+        }
+        
+        return null;
+    }
 }
 
+let boardControllerInstance = null;
+
 document.addEventListener('DOMContentLoaded', () => {
-    new BoardController();
+    boardControllerInstance = new BoardController();
+    window.boardControllerInstance = boardControllerInstance;
 });
