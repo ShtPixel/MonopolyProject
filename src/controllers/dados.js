@@ -69,8 +69,13 @@ document.addEventListener("DOMContentLoaded", function () {
     animateDice();
     sumLabel.textContent = "Suma: " + suma;
     moverFichaJugadorActual(suma);
-    // El cambio de turno ahora lo maneja el sistema Game
-    console.log(`Dice sum: ${suma} - Turn management handled by Game controller`);
+    
+    // Llamar al sistema de juego después de un breve delay para la animación
+    setTimeout(() => {
+      if (window.gameHandleDiceRoll && typeof window.gameHandleDiceRoll === 'function') {
+        window.gameHandleDiceRoll();
+      }
+    }, 600);
   }
 
   // Asignar el evento de clic al botón "Lanzar Dados"

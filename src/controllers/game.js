@@ -105,24 +105,13 @@ class Game {
         this.isGameActive = true;
         this.updatePlayerInfoPanel();
         
-        // Remover eventos anteriores para evitar duplicados
-        const rollDiceButton = document.getElementById('rollDiceButton');
-        if (rollDiceButton) {
-            // Clonar el botón para remover todos los event listeners
-            const newButton = rollDiceButton.cloneNode(true);
-            rollDiceButton.parentNode.replaceChild(newButton, rollDiceButton);
-            
-            // Agregar el nuevo event listener
-            newButton.addEventListener('click', (event) => {
-                event.preventDefault();
-                this.handleDiceRoll();
-            });
-        }
-
         console.log('Game started! Current player:', this.getCurrentPlayer().username);
         
         // Mostrar mensaje inicial
         this.showGameMessage(`¡Juego iniciado! Es el turno de ${this.getCurrentPlayer().username}`);
+        
+        // Exponer el método handleDiceRoll globalmente para que dados.js pueda usarlo
+        window.gameHandleDiceRoll = () => this.handleDiceRoll();
     }
 
     handleDiceRoll() {
@@ -132,74 +121,74 @@ class Game {
         }
 
         const currentPlayer = this.getCurrentPlayer();
-        console.log(`${currentPlayer.username} is rolling dice...`);
+        console.log(`${currentPlayer.username} is about to move...`);
         
-        // Esperar un momento para que se complete la animación de dados
-        setTimeout(() => {
-            const diceSum = this.getDiceSum();
-            console.log(`Dice sum: ${diceSum}`);
+        // Obtener la suma de los dados inmediatamente
+        const diceSum = this.getDiceSum();
+        console.log(`Dice sum: ${diceSum}`);
+        
+        if (diceSum > 0) {
+            console.log(`Moving ${currentPlayer.username} by ${diceSum} spaces`);
             
-            if (diceSum > 0) {
-                console.log(`Moving ${currentPlayer.username} by ${diceSum} spaces`);
-                
-                // Mover al jugador
-                currentPlayer.moveBy(diceSum);
-                
-                // Mostrar mensaje del movimiento
-                this.showGameMessage(`${currentPlayer.username} se movió ${diceSum} espacios a la posición ${currentPlayer.position}`);
-                
-                // Procesar la acción de la casilla
-                this.processSpaceAction(currentPlayer);
-                
-                // Actualizar información
-                this.updatePlayerInfoPanel();
-                
-                // Pasar al siguiente turno después de un breve delay
-                setTimeout(() => {
-                    this.nextTurn();
-                }, 1000);
-            } else {
-                console.log('Invalid dice sum:', diceSum);
-                this.showGameMessage('Error: Primero debes lanzar los dados');
-            }
-        }, 500);
+            // Mover al jugador
+            currentPlayer.moveBy(diceSum);
+            
+            // Mostrar mensaje del movimiento
+            this.showGameMessage(`${currentPlayer.username} se movió ${diceSum} espacios a la posición ${currentPlayer.position}`);
+            
+            // Procesar la acción de la casilla
+            this.processSpaceAction(currentPlayer);
+            
+            // Actualizar información
+            this.updatePlayerInfoPanel();
+            
+            // Pasar al siguiente turno después de un breve delay
+            setTimeout(() => {
+                this.nextTurn();
+            }, 2000);
+        } else {
+            console.log('Invalid dice sum:', diceSum);
+            this.showGameMessage('Error: Primero debes lanzar los dados');
+        }
     }
 
     getDiceSum() {
-        // Intentar obtener la suma desde el controlador de dados
+        // Primero intentar obtener la suma desde el sumLabel (más confiable)
         const sumLabel = document.getElementById('sumLabel');
-        if (sumLabel) {
+        if (sumLabel && sumLabel.textContent) {
             const sumText = sumLabel.textContent;
             const match = sumText.match(/Suma: (\d+)/);
             if (match) {
                 const sum = parseInt(match[1]);
-                console.log(`Found dice sum in label: ${sum}`);
-                return sum;
+                if (sum > 0 && sum <= 12) {  // Validar rango válido para dados
+                    console.log(`Found dice sum in label: ${sum}`);
+                    return sum;
+                }
             }
         }
         
-        // Si no hay suma en el label, verificar los dados individuales
+        // Si no hay suma válida en el label, verificar los dados individuales
         const die1 = document.getElementById('die1');
         const die2 = document.getElementById('die2');
         
-        if (die1 && die2) {
+        if (die1 && die2 && die1.textContent && die2.textContent) {
             const die1Value = parseInt(die1.textContent) || 0;
             const die2Value = parseInt(die2.textContent) || 0;
             const sum = die1Value + die2Value;
             
-            if (sum > 0) {
+            if (sum >= 2 && sum <= 12) {  // Rango válido para suma de dos dados
                 console.log(`Calculated dice sum: ${die1Value} + ${die2Value} = ${sum}`);
                 return sum;
             }
         }
         
-        // Verificar input manual de debug
+        // Verificar input manual de debug como último recurso
         const debugInput = document.getElementById('debugDice');
         if (debugInput && debugInput.value) {
             const debugValue = parseInt(debugInput.value);
-            if (debugValue > 0 && debugValue <= 12) {
+            if (debugValue > 0 && debugValue <= 40) {
                 console.log(`Using debug dice value: ${debugValue}`);
-                debugInput.value = ''; // Limpiar después de usar
+                // No limpiar aquí, dejar que el usuario lo haga manualmente
                 return debugValue;
             }
         }
@@ -324,8 +313,10 @@ let gameInstance = null;
 document.addEventListener('DOMContentLoaded', () => {
     // Esperar un poco para que el board se inicialice
     setTimeout(() => {
+        console.log('Initializing game...');
         gameInstance = new Game();
         // Exponer globalmente para debugging
         window.gameInstance = gameInstance;
+        console.log('Game instance created and exposed globally');
     }, 500);
 });
