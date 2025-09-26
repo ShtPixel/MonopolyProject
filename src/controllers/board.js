@@ -42,26 +42,82 @@ class BoardController {
         }
     }
 
+    // Crea el tablero siguiendo el recorrido clásico de Monopoly
     initializeBoard() {
-        for (let i = 0; i < 121; i++) {
+        const board = this.boardElement;
+        board.innerHTML = '';
+        let id = 0;
+
+        // Fila inferior (GO a Jail)
+        for (let col = 10; col >= 0; col--) {
             const cell = document.createElement('div');
-            const row = Math.floor(i / 11);
-            const col = i % 11;
-            if (row === 0 || row === 10 || col === 0 || col === 10) {
-                cell.className = 'space';
-                if (this.isCorner(row, col)) {
-                    cell.classList.add('corner');
-                    cell.dataset.corner = `${row}-${col}`;
-                } else {
-                    if (row === 10) cell.classList.add('bottom-side');
-                    if (col === 0) cell.classList.add('left-side');
-                    if (row === 0) cell.classList.add('top-side');
-                    if (col === 10) cell.classList.add('right-side');
-                }
-            } else {
-                cell.className = 'board-center';
+            cell.className = 'space bottom-side';
+            cell.id = `cell-${id}`;
+            cell.style.gridRow = '11';
+            cell.style.gridColumn = `${col + 1}`;
+            if (col === 10) {
+                cell.classList.add('corner');
+                cell.dataset.corner = '10-10'; // GO
             }
-            this.boardElement.appendChild(cell);
+            if (col === 0) {
+                cell.classList.add('corner');
+                cell.dataset.corner = '10-0'; // Jail
+            }
+            board.appendChild(cell);
+            id++;
+        }
+
+        // Columna izquierda (Jail a Free Parking)
+        for (let row = 9; row >= 1; row--) {
+            const cell = document.createElement('div');
+            cell.className = 'space left-side';
+            cell.id = `cell-${id}`;
+            cell.style.gridRow = `${row + 1}`;
+            cell.style.gridColumn = '1';
+            if (row === 1) {
+                cell.classList.add('corner');
+                cell.dataset.corner = '0-0'; // Free Parking
+            }
+            board.appendChild(cell);
+            id++;
+        }
+
+        // Fila superior (Free Parking a Go to Jail)
+        for (let col = 0; col <= 9; col++) {
+            const cell = document.createElement('div');
+            cell.className = 'space top-side';
+            cell.id = `cell-${id}`;
+            cell.style.gridRow = '1';
+            cell.style.gridColumn = `${col + 1}`;
+            board.appendChild(cell);
+            id++;
+        }
+        // Esquina superior derecha (Go to Jail)
+        const goToJailCell = document.createElement('div');
+        goToJailCell.className = 'space top-side corner';
+        goToJailCell.id = `cell-${id}`;
+        goToJailCell.style.gridRow = '1';
+        goToJailCell.style.gridColumn = '11';
+        goToJailCell.dataset.corner = '0-10';
+        board.appendChild(goToJailCell);
+        id++;
+
+        // Columna derecha (Go to Jail a GO)
+        for (let row = 1; row <= 9; row++) {
+            const cell = document.createElement('div');
+            cell.className = 'space right-side';
+            cell.id = `cell-${id}`;
+            cell.style.gridRow = `${row + 1}`;
+            cell.style.gridColumn = '11';
+            board.appendChild(cell);
+            id++;
+        }
+
+        // Centro del tablero (no jugable)
+        for (let i = 0; i < 81; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'board-center';
+            board.appendChild(cell);
         }
     }
 
@@ -83,25 +139,24 @@ class BoardController {
             }
         });
 
-        // Lados (sentido clásico del tablero)
-        // BOTTOM: de derecha a izquierda (excluyendo esquinas)
+        // BOTTOM: de GO (10,10) a Jail (10,0) - posiciones 1 a 9 (excluyendo esquinas)
         this.populateRow(
-            boardData.bottom.slice(1).reverse(), // [1..9] invertido
+            boardData.bottom.slice(1, 10), // [1..9] en orden
             'bottom-side'
         );
-        // LEFT: de abajo a arriba (excluyendo esquinas)
+        // LEFT: de Jail (10,0) a Free Parking (0,0) - posiciones 1 a 9 (excluyendo esquinas), invertido para sentido clásico
         this.populateRow(
             boardData.left.slice(1, 10).reverse(), // [1..9] invertido
             'left-side'
         );
-        // TOP: de izquierda a derecha (excluyendo esquinas)
+        // TOP: de Free Parking (0,0) a Go to Jail (0,10) - posiciones 0 a 8 (excluyendo esquinas)
         this.populateRow(
-            boardData.top.slice(0, 9), // [0..8]
+            boardData.top.slice(0, 9), // [0..8] en orden
             'top-side'
         );
-        // RIGHT: de arriba a abajo (excluyendo esquinas)
+        // RIGHT: de Go to Jail (0,10) a GO (10,10) - posiciones 0 a 8 (excluyendo esquinas), invertido para sentido clásico
         this.populateRow(
-            boardData.right.slice(0, 9), // [0..8]
+            boardData.right.slice(0, 9).reverse(), // [0..8] invertido
             'right-side'
         );
     }
