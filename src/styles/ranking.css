@@ -1,0 +1,174 @@
+/* Variables heredadas de common.css */
+:root {
+  --primary-color: #43cea2;
+  --warning-color: #ffd700;
+  --danger-color: #ff4444;
+  --background-opacity: rgba(230, 220, 220, 0.319);
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --text-light: #ffffff;
+  --hover-color: #185a9d;
+  --border-radius: 12px;
+  --transition-speed: 0.3s;
+}
+
+body {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                url('../../assets/images/blabla.jpg') no-repeat center center;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Contenedor del ranking */
+#rankingContainer {
+  background: var(--background-opacity);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius);
+  box-shadow: 0 8px 32px 0 var(--shadow-color);
+  padding: 2.5rem 1.5rem;
+  max-width: 700px;
+  margin: 2rem auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+  width: 100%;
+}
+
+/* Título del ranking */
+.ranking-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Tabla de ranking */
+.ranking-table {
+  background: transparent;
+  color: var(--text-light);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin-bottom: 0;
+}
+
+.ranking-table th, .ranking-table td {
+  background: transparent;
+  border: none;
+  vertical-align: middle;
+  font-family: "Poppins", sans-serif;
+}
+
+.ranking-table thead th {
+  background: rgba(67, 206, 162, 0.15);
+  color: var(--primary-color);
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-bottom: 2px solid var(--primary-color);
+  text-align: center;
+}
+
+.ranking-table tbody tr {
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.ranking-table tbody tr:hover {
+  background: rgba(67, 206, 162, 0.08);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.10);
+}
+
+.ranking-table td, .ranking-table th {
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+}
+
+/* Columnas */
+.rank {
+  font-weight: bold;
+  color: var(--primary-color);
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  width: 44px;
+}
+
+.nickname {
+  font-weight: 600;
+  color: var(--text-light);
+  font-size: 1.1rem;
+  text-align: left;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.score {
+  font-weight: bold;
+  color: var(--warning-color);
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  width: 70px;
+}
+
+.country-name {
+  color: var(--text-light);
+  font-size: 1rem;
+  opacity: 0.85;
+  text-align: left;
+}
+
+/* Medallas para top 3 */
+.rank.rank-1 { color: var(--warning-color); }
+.rank.rank-2 { color: #c0c0c0; }
+.rank.rank-3 { color: #cd7f32; }
+
+/* Botón estilo Monopoly */
+.btn-monopoly {
+  color: var(--text-light);
+  font-weight: 600;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 12px 24px;
+  transition: all var(--transition-speed) ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 8px 0;
+  background-color: var(--primary-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-monopoly:hover {
+  background-color: var(--hover-color);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.18);
+}
+
+
+/* Responsive */
+@media screen and (max-width: 1200px) {
+  #rankingContainer {
+    max-width: 98vw;
+    padding: 1.5rem 0.5rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #rankingContainer {
+    padding: 1.2rem 0.5rem;
+    max-width: 99vw;
+  }
+  .ranking-title {
+    font-size: 1.4rem;
+  }
+  .ranking-table th, .ranking-table td {
+    font-size: 0.98rem;
+    padding: 0.5rem 0.2rem;
+  }
+  .ranking-table img {
+    width: 28px;
+    height: 28px;
+  }
+}
+
