@@ -1,0 +1,26 @@
+.ranking-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 8px 10px;
+  border-bottom: 1px solid #ccc;
+  background-color: #f9f9f9;
+  transition: background-color 0.2s ease;
+}
+
+.ranking-row:hover {
+  background-color: #e6f0ff;
+}
+
+.rank { width: 30px; font-weight: bold; }
+.nickname { flex: 1; font-weight: 500; }
+.score { width: 50px; text-align: right; font-weight: bold; }
+.country-name { flex: 1; }
+.ranking-row img { width: 24px; height: 24px; border-radius: 4px; }
+
+/* Adaptación para móviles */
+@media screen and (max-width: 768px) {
+  .ranking-row { flex-wrap: wrap; gap: 10px; }
+  .rank, .score { width: auto; text-align: left; }
+  .nickname, .country-name { flex: 100%; }
+}
