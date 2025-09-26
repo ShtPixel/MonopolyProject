@@ -53,7 +53,7 @@
 .space {
   background: #fff;
   border: 1px solid #333;
-  padding: clamp(0.5px, 0.5vw, 8px);
+  padding: clamp(2px, 0.5vw, 8px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -62,7 +62,6 @@
   font-size: clamp(0.6rem, 1.2vw, 0.8rem);
   min-height: 0;
   overflow: hidden;
-  position: relative;
 }
 
 /* Estilos para el contenido de las casillas */
@@ -98,11 +97,11 @@
 
 /* Rotación de texto para los lados */
 .left-side {
-  transform: rotate(90deg);
+  transform: rotate(-90deg);
 }
 
 .right-side {
-  transform: rotate(-90deg);
+  transform: rotate(90deg);
 }
 
 .top-side {
@@ -147,7 +146,7 @@
   padding: clamp(4px, 1vw, 10px);
   text-align: center;
   line-height: 1.2;
-  border-radius: 1px;
+  border-radius: 4px;
 }
 
 .corner-name {
@@ -230,151 +229,6 @@
   background-color: #dcdcdc;
 }
 
-/* Estilos para las fichas de jugadores */
-.players-container {
-  position: absolute;
-  bottom: 2px;
-  right: 2px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1px;
-  max-width: 90%;
-  z-index: 10;
-}
-
-.player-piece {
-  width: clamp(12px, 2vw, 20px);
-  height: clamp(12px, 2vw, 20px);
-  border-radius: 50%;
-  border: 2px solid #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: clamp(0.5rem, 1vw, 0.7rem);
-  font-weight: bold;
-  color: white;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.player-piece:hover {
-  transform: scale(1.1);
-}
-
-.player-icon {
-  font-size: inherit;
-  line-height: 1;
-}
-
-/* Panel de información de jugadores */
-.player-info-panel {
-  position: fixed;
-  top: 100px;
-  right: 20px;
-  width: 300px;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  z-index: 1000;
-  backdrop-filter: blur(10px);
-}
-
-.player-info-panel h3 {
-  color: #2c3e50;
-  margin-bottom: 15px;
-  text-align: center;
-  font-size: 1.2rem;
-}
-
-.player-info-card {
-  background: white;
-  border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.player-info-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-}
-
-.player-info-card.active {
-  background: #e8f5e8;
-  border-left-width: 6px !important;
-  transform: scale(1.02);
-}
-
-.player-name {
-  font-weight: bold;
-  font-size: 1.1rem;
-  margin-bottom: 8px;
-  color: #2c3e50;
-}
-
-.player-details {
-  font-size: 0.9rem;
-  color: #666;
-}
-
-.player-details div {
-  margin-bottom: 3px;
-}
-
-.current-player-indicator {
-  background: #3498db;
-  color: white;
-  padding: 10px;
-  border-radius: 8px;
-  text-align: center;
-  font-weight: bold;
-  margin-top: 15px;
-}
-
-.current-player-indicator span {
-  color: #fff;
-  font-size: 1.1rem;
-}
-
-/* Responsive para el panel */
-@media (max-width: 768px) {
-  .player-info-panel {
-    width: 250px;
-    right: 10px;
-    top: 80px;
-    padding: 15px;
-  }
-  
-  .player-piece {
-    width: clamp(10px, 1.5vw, 16px);
-    height: clamp(10px, 1.5vw, 16px);
-    font-size: clamp(0.4rem, 0.8vw, 0.6rem);
-  }
-}
-
-@media (max-width: 480px) {
-  .player-info-panel {
-    width: 220px;
-    padding: 10px;
-  }
-  
-  .player-info-card {
-    padding: 8px;
-  }
-  
-  .player-name {
-    font-size: 1rem;
-  }
-  
-  .player-details {
-    font-size: 0.8rem;
-  }
-}
-
 /* Media Queries para Responsividad */
 @media (max-width: 768px) {
   .board-container {
@@ -447,33 +301,6 @@
     font-size: clamp(0.4rem, 1vw, 0.6rem);
     padding: 2px;
   }
-}
-
-/* Mensaje del juego */
-.game-message {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.9);
-  color: white;
-  padding: 20px 30px;
-  border-radius: 10px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  text-align: center;
-  z-index: 2000;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  display: none;
-  max-width: 80%;
-  animation: fadeInOut 3s ease-in-out;
-}
-
-@keyframes fadeInOut {
-  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-  20% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
 }
 
 @media (orientation: landscape) and (max-height: 600px) {
