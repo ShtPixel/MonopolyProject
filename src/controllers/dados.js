@@ -4,41 +4,77 @@ document.addEventListener("DOMContentLoaded", function () {
   const die2 = document.getElementById("die2");
   const sumLabel = document.getElementById("sumLabel");
   const debugDice = document.getElementById("debugDice");
+  const rollDiceButton = document.getElementById("rollDiceButton");
+
+  // Estructura mínima de jugadores y tablero
+  window.jugadores = window.jugadores || [
+    { nombre: "Jugador 1", position: 0, fichaId: "ficha-jugador-1" },
+    // ...otros jugadores
+  ];
+  window.jugadorActual = window.jugadorActual || 0; // Índice del jugador actual
+  const totalCasillas = 40; // Cambia según tu tablero
+
+  function animateDice() {
+    die1.classList.add("animate");
+    die2.classList.add("animate");
+    setTimeout(() => {
+      die1.classList.remove("animate");
+      die2.classList.remove("animate");
+    }, 500);
+  }
+
+  function animateInput() {
+    debugDice.classList.add("animate");
+    setTimeout(() => {
+      debugDice.classList.remove("animate");
+    }, 500);
+  }
+
+  function moverFichaJugadorActual(suma) {
+    const jugador = window.jugadores[window.jugadorActual];
+    jugador.position = (jugador.position + suma) % totalCasillas;
+    if (typeof window.renderFicha === "function") {
+      window.renderFicha(jugador);
+    } else {
+      console.log(
+        `${jugador.nombre} se mueve a la casilla ${jugador.position}`
+      );
+    }
+  }
 
   // Función para lanzar los dados y mostrar el resultado
   function rollDice() {
-    let val1, val2;
+    let suma;
     const debug = debugDice.value.trim();
 
     if (debug) {
-      // Modo de depuración
-      const parts = debug.split(",").map((x) => parseInt(x, 10));
-      if (
-        parts.length === 2 &&
-        parts.every((n) => Number.isInteger(n) && n >= 1 && n <= 6)
-      ) {
-        val1 = parts[0];
-        val2 = parts[1];
-      } else {
-        alert("Ingrese dos números entre 1 y 6, separados por coma.");
+      suma = parseInt(debug, 10);
+      if (isNaN(suma) || suma < 1 || suma > 40) {
+        alert("Ingrese un número entre 1 y 40.");
+        animateInput();
         return;
       }
+      // Distribuye la suma en dos dados válidos solo visualmente
+      let val1 = Math.max(1, Math.min(6, suma - 1));
+      let val2 = suma - val1;
+      if (val2 < 1 || val2 > 6) val2 = Math.max(1, Math.min(6, suma - val1));
+      die1.textContent = val1;
+      die2.textContent = val2;
     } else {
-      // Generar números aleatorios para los dados
-      val1 = Math.floor(Math.random() * 6) + 1;
-      val2 = Math.floor(Math.random() * 6) + 1;
+      const val1 = Math.floor(Math.random() * 6) + 1;
+      const val2 = Math.floor(Math.random() * 6) + 1;
+      suma = val1 + val2;
+      die1.textContent = val1;
+      die2.textContent = val2;
     }
 
-    // Actualizar los dados con los valores generados
-    die1.textContent = val1;
-    die2.textContent = val2;
-
-    // Mostrar la suma de los dados
-    sumLabel.textContent = "Suma: " + (val1 + val2);
+    animateDice();
+    sumLabel.textContent = "Suma: " + suma;
+    moverFichaJugadorActual(suma);
+    window.jugadorActual = (window.jugadorActual + 1) % window.jugadores.length;
   }
 
   // Asignar el evento de clic al botón "Lanzar Dados"
-  const rollDiceButton = document.getElementById("rollDiceButton");
   rollDiceButton.addEventListener("click", rollDice);
 
   // También permitir el lanzamiento de los dados presionando Enter en el campo de depuración
