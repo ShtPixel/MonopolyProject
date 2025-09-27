@@ -44,7 +44,7 @@
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link fw-semibold text-light" href="#"
+              <a class="nav-link fw-semibold text-light" href="#" id="endGameButton"
                 >Finalizar Juego</a
               >
             </li>
@@ -75,6 +75,52 @@
     <div class="board-container">
       <div class="board" id="board"></div>
     </div>
+
+    <!-- Modal de confirmación para finalizar juego -->
+    <div class="modal fade" id="endGameConfirmModal" tabindex="-1" aria-labelledby="endGameConfirmModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="endGameConfirmModalLabel">Finalizar Juego</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>¿Estás seguro de que quieres finalizar el juego?</p>
+            <p class="text-muted">Se mostrarán las estadísticas finales de todos los jugadores.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-danger" id="confirmEndGame">Finalizar Juego</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de estadísticas finales -->
+    <div class="modal fade" id="gameStatsModal" tabindex="-1" aria-labelledby="gameStatsModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="gameStatsModalLabel">📊 Estadísticas Finales del Juego</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div id="gameStatsContent">
+              <!-- Aquí se insertarán las estadísticas -->
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="window.location.href='../../index.html'">
+              Volver al Menú Principal
+            </button>
+            <button type="button" class="btn btn-success" onclick="window.location.href='ranking.html'">
+              Ver Ranking Global
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="../controllers/boardMapper.js"></script>
     <script src="../controllers/player.js"></script>
     <script src="../controllers/board.js"></script>

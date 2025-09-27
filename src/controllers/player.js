@@ -70,15 +70,38 @@ class Player {
         console.log(`Placing ${this.username} on position ${this.position}`, spaceElement);
         
         if (spaceElement) {
-            // Crear contenedor de jugadores si no existe
+            // Verificar si es una esquina (posiciones 0, 10, 20, 30)
+            const isCorner = [0, 10, 20, 30].includes(this.position);
+            
             let playersContainer = spaceElement.querySelector('.players-container');
             if (!playersContainer) {
                 playersContainer = document.createElement('div');
                 playersContainer.className = 'players-container';
+                
+                if (isCorner) {
+                    // Para esquinas, añadir el contenedor con estilos especiales
+                    playersContainer.style.cssText = `
+                        position: absolute;
+                        top: 5px;
+                        right: 5px;
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 2px;
+                        z-index: 20;
+                        max-width: 40px;
+                    `;
+                }
+                
                 spaceElement.appendChild(playersContainer);
             }
+            
+            // Asegurar que el elemento padre tenga position relative para las esquinas
+            if (isCorner && spaceElement.style.position !== 'relative') {
+                spaceElement.style.position = 'relative';
+            }
+            
             playersContainer.appendChild(this.element);
-            console.log(`${this.username} placed successfully on position ${this.position}`);
+            console.log(`${this.username} placed successfully on position ${this.position} (corner: ${isCorner})`);
         } else {
             console.error(`Could not find space element for position ${this.position}`);
         }
