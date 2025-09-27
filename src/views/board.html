@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="../styles/common.css" />
     <link rel="stylesheet" href="../styles/login.css" />
     <link rel="stylesheet" href="../styles/ranking.css" />
+    <link rel="stylesheet" href="../styles/properties-modal.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
       rel="stylesheet"
@@ -116,6 +117,26 @@
             <button type="button" class="btn btn-success" onclick="window.location.href='ranking.html'">
               Ver Ranking Global
             </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de propiedades del jugador -->
+    <div class="modal fade" id="playerPropertiesModal" tabindex="-1" aria-labelledby="playerPropertiesModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="playerPropertiesModalLabel">🏠 Propiedades del Jugador</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body player-properties-modal">
+            <div id="playerPropertiesContent">
+              <!-- Aquí se insertará el contenido de las propiedades -->
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
           </div>
         </div>
       </div>

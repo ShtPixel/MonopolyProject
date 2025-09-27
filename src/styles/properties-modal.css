@@ -1,0 +1,135 @@
+/* Estilos adicionales para modal de propiedades de jugador */
+
+.player-info-card {
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+}
+
+.player-info-card:hover {
+  background: #e9ecef !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Modal de propiedades de jugador */
+.player-properties-modal {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.player-summary {
+  background: linear-gradient(135deg, #4a90e2, #357abd);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.summary-item {
+  text-align: center;
+}
+
+.summary-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.summary-label {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.color-group {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  margin-bottom: 15px;
+}
+
+.color-header {
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.color-indicator {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.properties-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.property-item {
+  background: white;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border-left: 3px solid #007bff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.property-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.property-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.property-price {
+  font-weight: bold;
+  color: #28a745;
+}
+
+.property-details {
+  display: flex;
+  gap: 15px;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.rent-info {
+  color: #007bff;
+  font-weight: 500;
+}
+
+.houses-info {
+  color: #fd7e14;
+  font-weight: 500;
+}
+
+.hotel-info {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.railroads-section,
+.utilities-section {
+  background: #f1f3f4;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #e0e3e6;
+  margin-bottom: 15px;
+}
+
+.railroads-section .property-item {
+  border-left-color: #6c757d;
+}
+
+.utilities-section .property-item {
+  border-left-color: #ffc107;
+}

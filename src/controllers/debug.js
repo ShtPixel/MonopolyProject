@@ -1,5 +1,127 @@
 // Debug utilities for Monopoly game
 class GameDebugger {
+    static testPropertyMechanics() {
+        console.log('=== TESTING PROPERTY MECHANICS ===');
+        
+        if (!window.gameInstance) {
+            console.log('Game instance not available');
+            return;
+        }
+        
+        const game = window.gameInstance;
+        const player = game.players[0];
+        
+        if (!player) {
+            console.log('No players available');
+            return;
+        }
+        
+        console.log('Testing with player:', player.username);
+        console.log('Player money:', player.money);
+        
+        // Simular datos de propiedad para prueba
+        const testProperty = {
+            id: 1,
+            name: "Avenida Mediterráneo",
+            type: "property",
+            color: "brown",
+            price: 60,
+            mortgage: 30,
+            rent: {
+                base: 2,
+                withHouse: [10, 30, 90, 160],
+                withHotel: 250
+            }
+        };
+        
+        // Probar compra de propiedad
+        console.log('--- Testing Property Purchase ---');
+        if (player.buyProperty(testProperty)) {
+            console.log('✓ Property purchased successfully');
+            console.log('Player money after purchase:', player.money);
+            console.log('Player properties:', player.properties.length);
+        } else {
+            console.log('✗ Failed to purchase property');
+        }
+        
+        // Probar construcción de casas
+        console.log('--- Testing House Construction ---');
+        if (game.getAllProperties && game.getAllProperties().length > 0) {
+            const allProperties = [testProperty]; // Usar propiedad de prueba
+            
+            if (player.canBuildHouse(testProperty.id, allProperties)) {
+                console.log('✓ Can build house');
+                if (player.buildHouse(testProperty.id, allProperties)) {
+                    console.log('✓ House built successfully');
+                    console.log('Houses on property:', player.properties[0]?.houses || 0);
+                }
+            } else {
+                console.log('Cannot build house - need all properties of same color');
+            }
+        }
+        
+        // Probar cálculo de renta
+        console.log('--- Testing Rent Calculation ---');
+        if (player.properties.length > 0) {
+            const rent = player.calculateRent(player.properties[0], [testProperty]);
+            console.log('Calculated rent:', rent);
+        }
+        
+        console.log('=== PROPERTY MECHANICS TEST COMPLETE ===');
+    }
+
+    static testCardActions() {
+        console.log('=== TESTING CARD ACTIONS ===');
+        
+        if (!window.gameInstance) {
+            console.log('Game instance not available');
+            return;
+        }
+        
+        const game = window.gameInstance;
+        const player = game.players[0];
+        
+        if (!player) {
+            console.log('No players available');
+            return;
+        }
+        
+        const initialMoney = player.money;
+        console.log('Player initial money:', initialMoney);
+        
+        // Simular carta de Sorpresa
+        console.log('--- Testing Chance Card ---');
+        game.handleChanceSpace(player);
+        
+        setTimeout(() => {
+            console.log('Player money after chance card:', player.money);
+            
+            // Simular carta de Caja de Comunidad
+            console.log('--- Testing Community Chest Card ---');
+            game.handleCommunityChestSpace(player);
+            
+            setTimeout(() => {
+                console.log('Player money after community chest card:', player.money);
+                console.log('=== CARD ACTIONS TEST COMPLETE ===');
+            }, 1000);
+        }, 1000);
+    }
+
+    static testAllGameMechanics() {
+        console.log('=== TESTING ALL GAME MECHANICS ===');
+        
+        // Ejecutar todas las pruebas en secuencia
+        this.testPropertyMechanics();
+        
+        setTimeout(() => {
+            this.testCardActions();
+        }, 2000);
+        
+        setTimeout(() => {
+            console.log('=== ALL TESTS COMPLETE ===');
+        }, 5000);
+    }
+    
     static testEndGame() {
         console.log('=== TESTING END GAME ===');
         
@@ -197,5 +319,16 @@ document.addEventListener('DOMContentLoaded', () => {
         endGameButton.onclick = () => GameDebugger.testEndGame();
         
         document.body.appendChild(endGameButton);
+        
+        const mechanicsButton = document.createElement('button');
+        mechanicsButton.textContent = 'Test Mechanics';
+        mechanicsButton.className = 'btn btn-info';
+        mechanicsButton.style.position = 'fixed';
+        mechanicsButton.style.bottom = '220px';
+        mechanicsButton.style.left = '20px';
+        mechanicsButton.style.zIndex = '1000';
+        mechanicsButton.onclick = () => GameDebugger.testAllGameMechanics();
+        
+        document.body.appendChild(mechanicsButton);
     }, 2000);
 });

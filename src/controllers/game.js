@@ -3,7 +3,9 @@ class Game {
         this.players = [];
         this.currentPlayerIndex = 0;
         this.boardController = null;
+        this.boardData = null;
         this.isGameActive = false;
+        this.lastDiceRoll = 0;
         this.initializeGame();
     }
 
@@ -16,6 +18,9 @@ class Game {
             window.location.href = 'login.html';
             return;
         }
+
+        // Cargar datos del tablero
+        await this.loadBoardData();
 
         // Crear objetos Player
         playersData.forEach(playerData => {
@@ -34,6 +39,18 @@ class Game {
         
         // Iniciar el juego
         this.startGame();
+    }
+
+    async loadBoardData() {
+        try {
+            const response = await fetch('http://localhost:5000/board');
+            this.boardData = await response.json();
+            console.log('Board data loaded:', this.boardData);
+        } catch (error) {
+            console.error('Error loading board data:', error);
+            // Datos de fallback si no se puede cargar desde el servidor
+            this.boardData = { bottom: [], left: [], top: [], right: [], chance: [], community_chest: [] };
+        }
     }
 
     async waitForBoard() {
@@ -84,12 +101,15 @@ class Game {
         if (playersList) {
             playersList.innerHTML = this.players.map(player => `
                 <div class="player-info-card ${player === this.getCurrentPlayer() ? 'active' : ''}" 
-                     style="border-left: 4px solid ${player.getColorCode()}">
+                     style="border-left: 4px solid ${player.getColorCode()}"
+                     onclick="window.gameInstance.showPlayerPropertiesModal('${player.username}')"
+                     title="Click para ver propiedades">
                     <div class="player-name">${player.username}</div>
                     <div class="player-details">
                         <div>País: ${player.country}</div>
-                        <div>Dinero: $${player.money}</div>
-                        <div>Propiedades: ${player.properties.length}</div>
+                        <div>Dinero: $${player.money.toLocaleString()}</div>
+                        <div>Propiedades: ${player.properties.length + player.railroads.length + player.utilities.length}</div>
+                        <div>Casas: ${player.houses} | Hoteles: ${player.hotels}</div>
                         <div>Posición: ${player.position}</div>
                     </div>
                 </div>
@@ -128,6 +148,7 @@ class Game {
         
         // Obtener la suma de los dados inmediatamente
         const diceSum = this.getDiceSum();
+        this.lastDiceRoll = diceSum; // Guardar el último lanzamiento
         console.log(`Dice sum: ${diceSum}`);
         
         if (diceSum > 0) {
@@ -207,17 +228,21 @@ class Game {
         if (spaceInfo) {
             switch (spaceInfo.type) {
                 case 'property':
+                case 'railroad':
+                case 'utility':
                     this.handlePropertySpace(player, spaceInfo);
                     break;
                 case 'tax':
                     this.handleTaxSpace(player, spaceInfo);
                     break;
-                case 'go_to_jail':
-                    this.sendToJail(player);
+                case 'special':
+                    this.handleSpecialSpace(player, spaceInfo);
                     break;
                 case 'chance':
+                    this.handleChanceSpace(player);
+                    break;
                 case 'community_chest':
-                    this.handleCardSpace(player, spaceInfo.type);
+                    this.handleCommunityChestSpace(player);
                     break;
                 default:
                     console.log(`${player.username} landed on ${spaceInfo.name}`);
@@ -262,7 +287,587 @@ class Game {
 
     handlePropertySpace(player, spaceInfo) {
         console.log(`${player.username} landed on property: ${spaceInfo.name}`);
-        // Implementar lógica de compra/pago de renta
+        
+        // Verificar si la propiedad ya tiene dueño
+        const owner = this.getPropertyOwner(spaceInfo.id);
+        
+        if (!owner) {
+            // Propiedad libre - mostrar opción de compra
+            this.showPropertyPurchaseDialog(player, spaceInfo);
+        } else if (owner !== player) {
+            // Propiedad de otro jugador - pagar renta
+            this.payRent(player, owner, spaceInfo);
+        } else {
+            // Es propiedad propia
+            this.showGameMessage(`${player.username} está en su propia propiedad: ${spaceInfo.name}`);
+            // Opcionalmente mostrar opciones de construcción
+            this.showPropertyManagementDialog(player, spaceInfo);
+        }
+    }
+
+    getPropertyOwner(propertyId) {
+        for (let player of this.players) {
+            if (player.ownsProperty(propertyId)) {
+                return player;
+            }
+        }
+        return null;
+    }
+
+    showPropertyPurchaseDialog(player, property) {
+        const canAfford = player.money >= property.price;
+        
+        // Crear modal de compra
+        const modal = this.createModal({
+            title: `Comprar Propiedad`,
+            body: `
+                <div class="property-purchase-dialog">
+                    <h5>${property.name}</h5>
+                    <div class="property-details">
+                        <p><strong>Precio:</strong> $${property.price}</p>
+                        <p><strong>Renta base:</strong> $${property.rent ? property.rent.base || property.rent[1] : 'N/A'}</p>
+                        <p><strong>Tu dinero:</strong> $${player.money}</p>
+                        ${property.color ? `<p><strong>Color:</strong> ${property.color}</p>` : ''}
+                    </div>
+                    ${canAfford ? 
+                        `<div class="alert alert-success">¡Puedes permitirte esta propiedad!</div>` :
+                        `<div class="alert alert-danger">No tienes suficiente dinero para comprar esta propiedad.</div>`
+                    }
+                </div>
+            `,
+            buttons: canAfford ? [
+                {
+                    text: 'Comprar',
+                    class: 'btn-success',
+                    action: () => {
+                        if (player.buyProperty(property)) {
+                            this.showGameMessage(`${player.username} compró ${property.name} por $${property.price}`);
+                            this.updatePlayerInfoPanel();
+                        }
+                    }
+                },
+                {
+                    text: 'No comprar',
+                    class: 'btn-secondary',
+                    action: () => {
+                        this.showGameMessage(`${player.username} decidió no comprar ${property.name}`);
+                    }
+                }
+            ] : [
+                {
+                    text: 'Entendido',
+                    class: 'btn-secondary',
+                    action: () => {}
+                }
+            ]
+        });
+    }
+
+    payRent(player, owner, property) {
+        const rentAmount = owner.calculateRent(owner.getProperty(property.id), this.getAllProperties());
+        
+        if (rentAmount > 0) {
+            player.payRent(rentAmount, owner);
+            this.showGameMessage(`${player.username} pagó $${rentAmount} de renta a ${owner.username} por ${property.name}`);
+            this.updatePlayerInfoPanel();
+            
+            // Verificar si el jugador quedó en bancarrota
+            if (player.money < 0) {
+                this.handleBankruptcy(player, owner);
+            }
+        }
+    }
+
+    showPropertyManagementDialog(player, property) {
+        const ownedProperty = player.getProperty(property.id);
+        if (!ownedProperty || ownedProperty.type !== 'property') return;
+        
+        const canBuildHouse = player.canBuildHouse(property.id, this.getAllProperties());
+        const canBuildHotel = player.canBuildHotel(property.id, this.getAllProperties());
+        
+        const modal = this.createModal({
+            title: `Administrar Propiedad`,
+            body: `
+                <div class="property-management-dialog">
+                    <h5>${property.name}</h5>
+                    <div class="property-details">
+                        <p><strong>Casas:</strong> ${ownedProperty.houses}</p>
+                        <p><strong>Hotel:</strong> ${ownedProperty.hotel ? 'Sí' : 'No'}</p>
+                        <p><strong>Renta actual:</strong> $${player.calculateRent(ownedProperty, this.getAllProperties())}</p>
+                        <p><strong>Tu dinero:</strong> $${player.money}</p>
+                    </div>
+                </div>
+            `,
+            buttons: [
+                ...(canBuildHouse ? [{
+                    text: 'Construir Casa ($100)',
+                    class: 'btn-primary',
+                    action: () => {
+                        if (player.buildHouse(property.id, this.getAllProperties())) {
+                            this.showGameMessage(`${player.username} construyó una casa en ${property.name}`);
+                            this.updatePlayerInfoPanel();
+                        }
+                    }
+                }] : []),
+                ...(canBuildHotel ? [{
+                    text: 'Construir Hotel ($250)',
+                    class: 'btn-warning',
+                    action: () => {
+                        if (player.buildHotel(property.id, this.getAllProperties())) {
+                            this.showGameMessage(`${player.username} construyó un hotel en ${property.name}`);
+                            this.updatePlayerInfoPanel();
+                        }
+                    }
+                }] : []),
+                {
+                    text: 'Cerrar',
+                    class: 'btn-secondary',
+                    action: () => {}
+                }
+            ]
+        });
+    }
+
+    getAllProperties() {
+        if (!this.boardData) return [];
+        
+        const allProperties = [
+            ...this.boardData.bottom,
+            ...this.boardData.left,
+            ...this.boardData.top,
+            ...this.boardData.right
+        ];
+        
+        return allProperties.filter(space => 
+            space.type === 'property' || space.type === 'railroad' || space.type === 'utility'
+        );
+    }
+
+    handleTaxSpace(player, spaceInfo) {
+        const taxAmount = Math.abs(spaceInfo.action?.money || 0);
+        player.money -= taxAmount;
+        
+        this.showGameMessage(`${player.username} pagó $${taxAmount} en impuestos en ${spaceInfo.name}`);
+        this.updatePlayerInfoPanel();
+        
+        if (player.money < 0) {
+            this.handleBankruptcy(player);
+        }
+    }
+
+    handleSpecialSpace(player, spaceInfo) {
+        switch (spaceInfo.name) {
+            case 'Salida':
+                // Ya se maneja automáticamente al pasar por GO
+                break;
+            case 'Parqueo Gratis':
+                this.showGameMessage(`${player.username} está descansando en el Parqueo Gratis`);
+                break;
+            case 'Cárcel / Solo de visita':
+                if (!player.isInJail) {
+                    this.showGameMessage(`${player.username} está de visita en la Cárcel`);
+                }
+                break;
+            case 'Ve a la Cárcel':
+                this.sendToJail(player);
+                break;
+        }
+    }
+
+    handleChanceSpace(player) {
+        if (!this.boardData.chance) return;
+        
+        const randomCard = this.boardData.chance[Math.floor(Math.random() * this.boardData.chance.length)];
+        this.executeCardAction(player, randomCard, 'Sorpresa');
+    }
+
+    handleCommunityChestSpace(player) {
+        if (!this.boardData.community_chest) return;
+        
+        const randomCard = this.boardData.community_chest[Math.floor(Math.random() * this.boardData.community_chest.length)];
+        this.executeCardAction(player, randomCard, 'Caja de Comunidad');
+    }
+
+    executeCardAction(player, card, cardType) {
+        this.showCardModal(player, card, cardType);
+        
+        if (card.action) {
+            if (card.action.money) {
+                player.money += card.action.money;
+                const action = card.action.money > 0 ? 'recibió' : 'pagó';
+                this.showGameMessage(`${player.username} ${action} $${Math.abs(card.action.money)} - ${card.description}`);
+            }
+            
+            if (card.action.goTo) {
+                if (card.action.goTo === 'jail') {
+                    this.sendToJail(player);
+                }
+            }
+            
+            this.updatePlayerInfoPanel();
+        }
+    }
+
+    showCardModal(player, card, cardType) {
+        const modal = this.createModal({
+            title: `${cardType}`,
+            body: `
+                <div class="card-modal text-center">
+                    <div class="card-icon mb-3">
+                        ${cardType === 'Sorpresa' ? '❓' : '📦'}
+                    </div>
+                    <h5>${card.description}</h5>
+                    ${card.action?.money ? `
+                        <div class="amount ${card.action.money > 0 ? 'text-success' : 'text-danger'}">
+                            ${card.action.money > 0 ? '+' : ''}$${card.action.money}
+                        </div>
+                    ` : ''}
+                </div>
+            `,
+            buttons: [{
+                text: 'Continuar',
+                class: 'btn-primary',
+                action: () => {}
+            }]
+        });
+    }
+
+    createModal({title, body, buttons}) {
+        // Crear modal dinámico
+        const modalId = `dynamic-modal-${Date.now()}`;
+        const modalHtml = `
+            <div class="modal fade" id="${modalId}" tabindex="-1" data-bs-backdrop="static">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">${title}</h5>
+                        </div>
+                        <div class="modal-body">
+                            ${body}
+                        </div>
+                        <div class="modal-footer">
+                            ${buttons.map(btn => `
+                                <button type="button" class="btn ${btn.class}" data-action="${btn.text}">
+                                    ${btn.text}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        const modalElement = document.getElementById(modalId);
+        const modal = new bootstrap.Modal(modalElement);
+        
+        // Configurar acciones de botones
+        buttons.forEach(btn => {
+            const buttonElement = modalElement.querySelector(`[data-action="${btn.text}"]`);
+            buttonElement.addEventListener('click', () => {
+                btn.action();
+                modal.hide();
+            });
+        });
+        
+        // Limpiar modal después de cerrarlo
+        modalElement.addEventListener('hidden.bs.modal', () => {
+            modalElement.remove();
+        });
+        
+        modal.show();
+        return modal;
+    }
+
+    handleBankruptcy(player, creditor = null) {
+        this.showGameMessage(`💸 ${player.username} ha quebrado!`);
+        
+        if (creditor) {
+            // Transferir propiedades al acreedor
+            creditor.properties.push(...player.properties);
+            creditor.railroads.push(...player.railroads);
+            creditor.utilities.push(...player.utilities);
+        }
+        
+        // Remover jugador del juego
+        const playerIndex = this.players.indexOf(player);
+        if (playerIndex > -1) {
+            this.players.splice(playerIndex, 1);
+            
+            // Ajustar índice del jugador actual si es necesario
+            if (this.currentPlayerIndex >= playerIndex && this.currentPlayerIndex > 0) {
+                this.currentPlayerIndex--;
+            }
+            
+            // Verificar si solo queda un jugador (ganador)
+            if (this.players.length === 1) {
+                this.declareWinner(this.players[0]);
+            }
+        }
+    }
+
+    showPlayerPropertiesModal(username) {
+        const player = this.players.find(p => p.username === username);
+        if (!player) {
+            console.error('Player not found:', username);
+            return;
+        }
+
+        const allProperties = [...player.properties, ...player.railroads, ...player.utilities];
+        const totalValue = this.calculatePlayerNetWorth(player);
+        
+        // Agrupar propiedades por color
+        const propertiesByColor = this.groupPropertiesByColor(player.properties);
+        
+        const modal = this.createModal({
+            title: `🏠 Propiedades de ${player.username}`,
+            body: `
+                <div class="player-properties-modal">
+                    <div class="player-summary mb-4">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="summary-item">
+                                    <div class="summary-value">${allProperties.length}</div>
+                                    <div class="summary-label">Propiedades</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="summary-item">
+                                    <div class="summary-value">${player.houses}</div>
+                                    <div class="summary-label">Casas</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="summary-item">
+                                    <div class="summary-value">${player.hotels}</div>
+                                    <div class="summary-label">Hoteles</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row text-center mt-3">
+                            <div class="col-6">
+                                <div class="summary-item">
+                                    <div class="summary-value text-success">$${player.money.toLocaleString()}</div>
+                                    <div class="summary-label">Dinero</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="summary-item">
+                                    <div class="summary-value text-info">$${totalValue.toLocaleString()}</div>
+                                    <div class="summary-label">Valor Total</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    ${allProperties.length === 0 ? 
+                        '<div class="alert alert-info text-center">Este jugador no posee propiedades</div>' :
+                        `
+                        <div class="properties-sections">
+                            ${this.renderPropertiesByColor(propertiesByColor)}
+                            ${this.renderRailroadsAndUtilities(player)}
+                        </div>
+                        `
+                    }
+                </div>
+            `,
+            buttons: [{
+                text: 'Cerrar',
+                class: 'btn-secondary',
+                action: () => {}
+            }]
+        });
+
+        // Hacer el modal más grande
+        const modalDialog = modal._element.querySelector('.modal-dialog');
+        modalDialog.classList.add('modal-lg');
+    }
+
+    calculatePlayerNetWorth(player) {
+        let netWorth = player.money;
+        
+        // Valor de propiedades (precio de compra)
+        player.properties.forEach(property => {
+            netWorth += property.price;
+            netWorth += property.houses * 100; // Cada casa vale $100
+            if (property.hotel) netWorth += 250; // Hotel vale $250
+        });
+        
+        // Valor de ferrocarriles
+        player.railroads.forEach(railroad => {
+            netWorth += railroad.price;
+        });
+        
+        // Valor de servicios
+        player.utilities.forEach(utility => {
+            netWorth += utility.price || 150; // Valor estimado de servicios
+        });
+        
+        return netWorth;
+    }
+
+    groupPropertiesByColor(properties) {
+        const grouped = {};
+        properties.forEach(property => {
+            if (!grouped[property.color]) {
+                grouped[property.color] = [];
+            }
+            grouped[property.color].push(property);
+        });
+        return grouped;
+    }
+
+    renderPropertiesByColor(propertiesByColor) {
+        if (Object.keys(propertiesByColor).length === 0) return '';
+
+        const colorNames = {
+            'brown': 'Marrón',
+            'purple': 'Púrpura', 
+            'pink': 'Rosa',
+            'orange': 'Naranja',
+            'red': 'Rojo',
+            'yellow': 'Amarillo',
+            'green': 'Verde',
+            'blue': 'Azul'
+        };
+
+        const colorStyles = {
+            'brown': '#8B4513',
+            'purple': '#8A2BE2',
+            'pink': '#FF69B4',
+            'orange': '#FF8C00',
+            'red': '#DC143C',
+            'yellow': '#FFD700',
+            'green': '#32CD32',
+            'blue': '#1E90FF'
+        };
+
+        return `
+            <h6 class="mb-3">🏘️ Propiedades por Color</h6>
+            ${Object.entries(propertiesByColor).map(([color, properties]) => `
+                <div class="color-group mb-3">
+                    <div class="color-header d-flex align-items-center mb-2">
+                        <div class="color-indicator me-2" style="background-color: ${colorStyles[color] || '#666'}"></div>
+                        <strong>${colorNames[color] || color} (${properties.length})</strong>
+                        ${this.hasColorMonopoly(color, properties) ? '<span class="badge bg-success ms-2">Monopolio</span>' : ''}
+                    </div>
+                    <div class="properties-list">
+                        ${properties.map(property => `
+                            <div class="property-item">
+                                <div class="property-main">
+                                    <span class="property-name">${property.name}</span>
+                                    <span class="property-price">$${property.price}</span>
+                                </div>
+                                <div class="property-details">
+                                    <span class="rent-info">Renta: $${this.calculateCurrentRent(property)}</span>
+                                    ${property.houses > 0 ? `<span class="houses-info">${property.houses} casas</span>` : ''}
+                                    ${property.hotel ? '<span class="hotel-info">🏨 Hotel</span>' : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('')}
+        `;
+    }
+
+    renderRailroadsAndUtilities(player) {
+        let html = '';
+        
+        if (player.railroads.length > 0) {
+            html += `
+                <div class="railroads-section mb-3">
+                    <h6 class="mb-2">🚂 Ferrocarriles (${player.railroads.length})</h6>
+                    <div class="properties-list">
+                        ${player.railroads.map(railroad => `
+                            <div class="property-item">
+                                <div class="property-main">
+                                    <span class="property-name">${railroad.name}</span>
+                                    <span class="property-price">$${railroad.price}</span>
+                                </div>
+                                <div class="property-details">
+                                    <span class="rent-info">Renta: $${railroad.rent[player.railroads.length]}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+        
+        if (player.utilities.length > 0) {
+            html += `
+                <div class="utilities-section mb-3">
+                    <h6 class="mb-2">⚡ Servicios Públicos (${player.utilities.length})</h6>
+                    <div class="properties-list">
+                        ${player.utilities.map(utility => `
+                            <div class="property-item">
+                                <div class="property-main">
+                                    <span class="property-name">${utility.name}</span>
+                                    <span class="property-price">$${utility.price || 150}</span>
+                                </div>
+                                <div class="property-details">
+                                    <span class="rent-info">Renta: Dados × ${player.utilities.length === 1 ? '4' : '10'}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+        
+        return html;
+    }
+
+    hasColorMonopoly(color, ownedProperties) {
+        // Número de propiedades de cada color en el tablero completo
+        const totalByColor = {
+            'brown': 2, 'purple': 3, 'pink': 3, 'orange': 3,
+            'red': 3, 'yellow': 3, 'green': 3, 'blue': 2
+        };
+        
+        return ownedProperties.length === (totalByColor[color] || 0);
+    }
+
+    calculateCurrentRent(property) {
+        if (property.hotel) {
+            return property.rent.withHotel;
+        } else if (property.houses > 0) {
+            return property.rent.withHouse[property.houses - 1];
+        } else {
+            // Si tiene monopolio del color, renta base se duplica
+            const hasMonopoly = this.hasColorMonopoly(property.color, 
+                this.players.find(p => p.properties.some(pr => pr.id === property.id))?.properties.filter(p => p.color === property.color) || []
+            );
+            return hasMonopoly ? property.rent.base * 2 : property.rent.base;
+        }
+    }
+
+    declareWinner(winner) {
+        this.isGameActive = false;
+        const modal = this.createModal({
+            title: '🎉 ¡Tenemos un Ganador!',
+            body: `
+                <div class="winner-announcement text-center">
+                    <h2>${winner.username}</h2>
+                    <p class="lead">¡Ha ganado el juego de Monopoly!</p>
+                    <div class="winner-stats">
+                        <p><strong>País:</strong> ${winner.country}</p>
+                        <p><strong>Dinero final:</strong> $${winner.money.toLocaleString()}</p>
+                        <p><strong>Propiedades:</strong> ${winner.properties.length + winner.railroads.length + winner.utilities.length}</p>
+                        <p><strong>Casas:</strong> ${winner.houses}</p>
+                        <p><strong>Hoteles:</strong> ${winner.hotels}</p>
+                    </div>
+                </div>
+            `,
+            buttons: [{
+                text: 'Finalizar Juego',
+                class: 'btn-success',
+                action: () => {
+                    this.finalizeGame();
+                }
+            }]
+        });
     }
 
     handleTaxSpace(player, spaceInfo) {
