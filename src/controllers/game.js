@@ -99,21 +99,31 @@ class Game {
         const currentPlayerName = document.getElementById('current-player-name');
         
         if (playersList) {
-            playersList.innerHTML = this.players.map(player => `
-                <div class="player-info-card ${player === this.getCurrentPlayer() ? 'active' : ''}" 
-                     style="border-left: 4px solid ${player.getColorCode()}"
-                     onclick="window.gameInstance.showPlayerPropertiesModal('${player.username}')"
-                     title="Click para ver propiedades">
-                    <div class="player-name">${player.username}</div>
-                    <div class="player-details">
-                        <div>País: ${player.country}</div>
-                        <div>Dinero: $${player.money.toLocaleString()}</div>
-                        <div>Propiedades: ${player.properties.length + player.railroads.length + player.utilities.length}</div>
-                        <div>Casas: ${player.houses} | Hoteles: ${player.hotels}</div>
-                        <div>Posición: ${player.position}</div>
+            playersList.innerHTML = this.players.map(player => {
+                const mortgagedCount = player.mortgagedProperties.size;
+                const mortgageDebt = Array.from(player.mortgagedProperties.values())
+                    .reduce((sum, value) => sum + Math.floor(value * 1.1), 0);
+                
+                return `
+                    <div class="player-info-card ${player === this.getCurrentPlayer() ? 'active' : ''}" 
+                         style="border-left: 4px solid ${player.getColorCode()}"
+                         onclick="window.gameInstance.showPlayerPropertiesModal('${player.username}')"
+                         title="Click para ver propiedades">
+                        <div class="player-name">
+                            ${player.username}
+                            ${mortgagedCount > 0 ? `<span class="mortgage-indicator" title="${mortgagedCount} propiedades hipotecadas">🏦${mortgagedCount}</span>` : ''}
+                        </div>
+                        <div class="player-details">
+                            <div>País: ${player.country}</div>
+                            <div class="${player.money < 100 ? 'text-danger' : ''}">💰 $${player.money.toLocaleString()}</div>
+                            <div>🏠 Propiedades: ${player.properties.length + player.railroads.length + player.utilities.length}</div>
+                            <div>🏗️ Casas: ${player.houses} | 🏨 Hoteles: ${player.hotels}</div>
+                            ${mortgageDebt > 0 ? `<div class="text-warning">🔒 Deuda: $${mortgageDebt.toLocaleString()}</div>` : ''}
+                            <div>📍 Posición: ${player.position}</div>
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         if (currentPlayerName) {
@@ -625,36 +635,48 @@ class Game {
                 <div class="player-properties-modal">
                     <div class="player-summary mb-4">
                         <div class="row text-center">
-                            <div class="col-4">
+                            <div class="col-3">
                                 <div class="summary-item">
                                     <div class="summary-value">${allProperties.length}</div>
                                     <div class="summary-label">Propiedades</div>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-3">
                                 <div class="summary-item">
                                     <div class="summary-value">${player.houses}</div>
                                     <div class="summary-label">Casas</div>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-3">
                                 <div class="summary-item">
                                     <div class="summary-value">${player.hotels}</div>
                                     <div class="summary-label">Hoteles</div>
                                 </div>
                             </div>
+                            <div class="col-3">
+                                <div class="summary-item">
+                                    <div class="summary-value text-warning">${player.mortgagedProperties.size}</div>
+                                    <div class="summary-label">Hipotecadas</div>
+                                </div>
+                            </div>
                         </div>
                         <div class="row text-center mt-3">
-                            <div class="col-6">
+                            <div class="col-4">
                                 <div class="summary-item">
                                     <div class="summary-value text-success">$${player.money.toLocaleString()}</div>
                                     <div class="summary-label">Dinero</div>
                                 </div>
                             </div>
-                            <div class="col-6">
+                            <div class="col-4">
                                 <div class="summary-item">
                                     <div class="summary-value text-info">$${totalValue.toLocaleString()}</div>
                                     <div class="summary-label">Valor Total</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="summary-item">
+                                    <div class="summary-value text-danger">$${Array.from(player.mortgagedProperties.values()).reduce((sum, value) => sum + Math.floor(value * 1.1), 0).toLocaleString()}</div>
+                                    <div class="summary-label">Deuda Hipotecas</div>
                                 </div>
                             </div>
                         </div>
@@ -671,11 +693,21 @@ class Game {
                     }
                 </div>
             `,
-            buttons: [{
-                text: 'Cerrar',
-                class: 'btn-secondary',
-                action: () => {}
-            }]
+            buttons: [
+                {
+                    text: '🏦 Gestionar Hipotecas',
+                    class: 'btn-warning',
+                    action: () => {
+                        modal.hide();
+                        this.showMortgageManagementModal(player.username);
+                    }
+                },
+                {
+                    text: 'Cerrar',
+                    class: 'btn-secondary',
+                    action: () => {}
+                }
+            ]
         });
 
         // Hacer el modal más grande
@@ -686,24 +718,35 @@ class Game {
     calculatePlayerNetWorth(player) {
         let netWorth = player.money;
         
-        // Valor de propiedades (precio de compra)
+        // Valor de propiedades (precio de compra) - excluyendo hipotecadas no pagadas
         player.properties.forEach(property => {
-            netWorth += property.price;
-            netWorth += property.houses * 100; // Cada casa vale $100
-            if (property.hotel) netWorth += 250; // Hotel vale $250
+            if (!player.isPropertyMortgaged(property)) {
+                netWorth += property.price;
+                netWorth += property.houses * 100; // Cada casa vale $100
+                if (property.hotel) netWorth += 250; // Hotel vale $250
+            }
         });
         
-        // Valor de ferrocarriles
+        // Valor de ferrocarriles - excluyendo hipotecadas no pagadas
         player.railroads.forEach(railroad => {
-            netWorth += railroad.price;
+            if (!player.isPropertyMortgaged(railroad)) {
+                netWorth += railroad.price;
+            }
         });
         
-        // Valor de servicios
+        // Valor de servicios - excluyendo hipotecadas no pagadas
         player.utilities.forEach(utility => {
-            netWorth += utility.price || 150; // Valor estimado de servicios
+            if (!player.isPropertyMortgaged(utility)) {
+                netWorth += utility.price || 150; // Valor estimado de servicios
+            }
         });
+
+        // Restar deudas de hipotecas pendientes
+        const mortgageDebt = Array.from(player.mortgagedProperties.values())
+            .reduce((sum, value) => sum + Math.floor(value * 1.1), 0);
+        netWorth -= mortgageDebt;
         
-        return netWorth;
+        return Math.max(0, netWorth); // No puede ser negativo
     }
 
     groupPropertiesByColor(properties) {
@@ -1091,6 +1134,256 @@ class Game {
             currentPlayer: this.currentPlayerIndex,
             isActive: this.isGameActive
         };
+    }
+
+    // ===============================
+    // GESTIÓN DE HIPOTECAS
+    // ===============================
+
+    /**
+     * Muestra el modal de gestión de hipotecas para un jugador
+     * @param {string} username - Nombre del jugador
+     */
+    showMortgageManagementModal(username) {
+        const player = this.players.find(p => p.username === username);
+        if (!player) {
+            console.error('Player not found:', username);
+            return;
+        }
+
+        // Solo el jugador actual puede gestionar hipotecas durante su turno
+        const isCurrentPlayer = player === this.getCurrentPlayer();
+        
+        const allProperties = [...player.properties, ...player.railroads, ...player.utilities];
+        const mortgagedProperties = player.getMortgagedProperties();
+        const availableForMortgage = allProperties.filter(prop => !player.isPropertyMortgaged(prop));
+
+        const modal = this.createModal({
+            title: `🏦 Gestión de Hipotecas - ${player.username}`,
+            body: `
+                <div class="mortgage-management-modal">
+                    <div class="alert alert-info mb-3">
+                        <strong>💡 Información sobre Hipotecas:</strong><br>
+                        • Al hipotecar recibes el 50% del valor de la propiedad<br>
+                        • No se puede cobrar renta de propiedades hipotecadas<br>
+                        • Para deshipotecar pagas el valor recibido + 10% de interés<br>
+                        • Las propiedades hipotecadas no cuentan en el puntaje final
+                    </div>
+
+                    ${!isCurrentPlayer ? 
+                        '<div class="alert alert-warning">Solo puedes gestionar hipotecas durante tu turno</div>' : 
+                        ''
+                    }
+
+                    <div class="mortgage-sections">
+                        <!-- Propiedades Disponibles para Hipotecar -->
+                        <div class="available-section mb-4">
+                            <h5 class="text-success">🏠 Propiedades Disponibles para Hipotecar</h5>
+                            ${availableForMortgage.length === 0 ? 
+                                '<p class="text-muted">No hay propiedades disponibles para hipotecar</p>' :
+                                `<div class="properties-grid">
+                                    ${availableForMortgage.map(prop => this.renderMortgageableProperty(prop, player, isCurrentPlayer)).join('')}
+                                </div>`
+                            }
+                        </div>
+
+                        <!-- Propiedades Hipotecadas -->
+                        <div class="mortgaged-section">
+                            <h5 class="text-warning">🔒 Propiedades Hipotecadas</h5>
+                            ${mortgagedProperties.length === 0 ? 
+                                '<p class="text-muted">No hay propiedades hipotecadas</p>' :
+                                `<div class="properties-grid">
+                                    ${mortgagedProperties.map(prop => this.renderMortgagedProperty(prop, player, isCurrentPlayer)).join('')}
+                                </div>`
+                            }
+                        </div>
+                    </div>
+
+                    <div class="mortgage-summary mt-3">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="summary-item">
+                                    <div class="summary-value text-success">$${player.money.toLocaleString()}</div>
+                                    <div class="summary-label">Dinero Disponible</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="summary-item">
+                                    <div class="summary-value text-warning">${mortgagedProperties.length}</div>
+                                    <div class="summary-label">Hipotecadas</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="summary-item">
+                                    <div class="summary-value text-danger">$${mortgagedProperties.reduce((sum, prop) => sum + prop.unmortgageValue, 0).toLocaleString()}</div>
+                                    <div class="summary-label">Total Deuda</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            buttons: [
+                {
+                    text: '🏠 Ver Propiedades',
+                    class: 'btn-info',
+                    action: () => {
+                        modal.hide();
+                        this.showPlayerPropertiesModal(player.username);
+                    }
+                },
+                {
+                    text: 'Cerrar',
+                    class: 'btn-secondary',
+                    action: () => {}
+                }
+            ]
+        });
+
+        // Hacer el modal más grande
+        const modalDialog = modal._element.querySelector('.modal-dialog');
+        modalDialog.classList.add('modal-lg');
+    }
+
+    /**
+     * Renderiza una propiedad disponible para hipotecar
+     */
+    renderMortgageableProperty(property, player, canInteract) {
+        const mortgageValue = property.mortgage || Math.floor(property.price * 0.5);
+        const canMortgage = canInteract && !player.hasConstructionsInColorGroup(property.color);
+        
+        return `
+            <div class="property-card available-property">
+                <div class="property-header">
+                    <div class="property-name">${property.name}</div>
+                    <div class="property-type">${this.getPropertyTypeLabel(property)}</div>
+                </div>
+                <div class="property-details">
+                    <div class="property-value">Valor: $${property.price.toLocaleString()}</div>
+                    <div class="mortgage-value text-success">Hipoteca: $${mortgageValue.toLocaleString()}</div>
+                    ${property.houses > 0 || property.hotel ? 
+                        '<div class="text-warning">⚠️ Vende construcciones primero</div>' : ''
+                    }
+                </div>
+                <div class="property-actions">
+                    <button class="btn btn-success btn-sm" 
+                            ${canMortgage ? '' : 'disabled'}
+                            onclick="window.gameInstance.mortgageProperty('${player.username}', '${property.id}')">
+                        🏦 Hipotecar ($${mortgageValue.toLocaleString()})
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Renderiza una propiedad hipotecada
+     */
+    renderMortgagedProperty(property, player, canInteract) {
+        return `
+            <div class="property-card mortgaged-property">
+                <div class="property-header">
+                    <div class="property-name">${property.name}</div>
+                    <div class="property-type">${this.getPropertyTypeLabel(property)}</div>
+                    <div class="mortgaged-badge">🔒 HIPOTECADA</div>
+                </div>
+                <div class="property-details">
+                    <div class="property-value">Valor Original: $${property.price.toLocaleString()}</div>
+                    <div class="mortgage-received text-info">Recibido: $${property.mortgageValue.toLocaleString()}</div>
+                    <div class="unmortgage-cost text-warning">Deshipotecar: $${property.unmortgageValue.toLocaleString()}</div>
+                </div>
+                <div class="property-actions">
+                    <button class="btn btn-warning btn-sm" 
+                            ${canInteract && player.money >= property.unmortgageValue ? '' : 'disabled'}
+                            onclick="window.gameInstance.unmortgageProperty('${player.username}', '${property.id}')">
+                        💰 Deshipotecar ($${property.unmortgageValue.toLocaleString()})
+                    </button>
+                    ${player.money < property.unmortgageValue ? 
+                        '<div class="text-danger">💸 Dinero insuficiente</div>' : ''
+                    }
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Obtiene la etiqueta del tipo de propiedad
+     */
+    getPropertyTypeLabel(property) {
+        switch(property.type) {
+            case 'property': return `🏠 ${property.color.toUpperCase()}`;
+            case 'railroad': return '🚂 Ferrocarril';
+            case 'utility': return '⚡ Servicio';
+            default: return property.type;
+        }
+    }
+
+    /**
+     * Hipoteca una propiedad específica
+     */
+    mortgageProperty(username, propertyId) {
+        const player = this.players.find(p => p.username === username);
+        if (!player) return;
+
+        // Verificar que sea el turno del jugador
+        if (player !== this.getCurrentPlayer()) {
+            this.showGameMessage('Solo puedes hipotecar propiedades durante tu turno');
+            return;
+        }
+
+        // Buscar la propiedad
+        const allProperties = [...player.properties, ...player.railroads, ...player.utilities];
+        const property = allProperties.find(prop => prop.id.toString() === propertyId.toString());
+        
+        if (!property) {
+            this.showGameMessage('Propiedad no encontrada');
+            return;
+        }
+
+        // Intentar hipotecar
+        if (player.mortgageProperty(property)) {
+            const mortgageValue = property.mortgage || Math.floor(property.price * 0.5);
+            this.showGameMessage(`${player.username} hipotecó ${property.name} por $${mortgageValue}`);
+            this.updatePlayerInfoPanel();
+            // Refrescar el modal
+            this.showMortgageManagementModal(username);
+        } else {
+            this.showGameMessage('No se pudo hipotecar la propiedad');
+        }
+    }
+
+    /**
+     * Deshipoteca una propiedad específica
+     */
+    unmortgageProperty(username, propertyId) {
+        const player = this.players.find(p => p.username === username);
+        if (!player) return;
+
+        // Verificar que sea el turno del jugador
+        if (player !== this.getCurrentPlayer()) {
+            this.showGameMessage('Solo puedes deshipotecar propiedades durante tu turno');
+            return;
+        }
+
+        // Buscar la propiedad
+        const allProperties = [...player.properties, ...player.railroads, ...player.utilities];
+        const property = allProperties.find(prop => prop.id.toString() === propertyId.toString());
+        
+        if (!property) {
+            this.showGameMessage('Propiedad no encontrada');
+            return;
+        }
+
+        // Intentar deshipotecar
+        if (player.unmortgageProperty(property)) {
+            const paymentAmount = Math.floor((property.mortgage || Math.floor(property.price * 0.5)) * 1.1);
+            this.showGameMessage(`${player.username} deshipotecó ${property.name} por $${paymentAmount}`);
+            this.updatePlayerInfoPanel();
+            // Refrescar el modal
+            this.showMortgageManagementModal(username);
+        } else {
+            this.showGameMessage('No se pudo deshipotecar la propiedad');
+        }
     }
 }
 
