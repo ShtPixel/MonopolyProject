@@ -1,0 +1,85 @@
+/* Panel de información de jugadores y tarjetas */
+.player-info-panel {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  min-width: 300px;
+  max-height: 70vh;
+  overflow-y: auto;
+  margin: 0 auto;
+  transition: all 0.3s ease;
+}
+
+.player-info-card {
+  background: #f8f9fa;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border-left: 4px solid #007bff;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.player-info-card:hover {
+  background: #e9ecef;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.player-info-card.active {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+  border-left-color: #fff;
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+
+.player-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.player-details {
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.current-player-indicator {
+  text-align: center;
+  margin-top: 15px;
+  padding: 10px;
+  background: linear-gradient(135deg, #6c757d, #495057);
+  color: white;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+@media (max-width: 900px) {
+  .player-info-panel {
+    width: 98vw;
+    max-width: 98vw;
+    margin: 10px auto 0 auto;
+    font-size: 0.95rem;
+  }
+}
+@media (max-width: 700px) {
+  .player-info-panel {
+    width: 98vw;
+    max-width: 98vw;
+    margin: 8px auto 0 auto;
+    font-size: 0.85rem;
+    box-shadow: none;
+  }
+}
+@media (max-width: 500px) {
+  .player-info-panel {
+    width: 98vw;
+    max-width: 98vw;
+    margin: 5px auto 0 auto;
+    font-size: 0.75rem;
+    box-shadow: none;
+    border-radius: 8px;
+  }
+}
