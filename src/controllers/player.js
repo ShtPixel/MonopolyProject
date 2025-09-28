@@ -44,21 +44,12 @@ class Player {
     console.log(
       `Moving ${this.username} from position ${this.position} to ${newPosition}`
     );
-
-    // Remover ficha de la posición actual
     this.removeFromBoard();
-
-    // Verificar si pasó por GO antes de actualizar la posición
     if (newPosition >= 40 && this.position < 40) {
       this.collectSalary();
     }
-
-    // Actualizar posición (el tablero tiene 40 casillas: 0-39)
     this.position = newPosition % 40;
-
     console.log(`${this.username} new position: ${this.position}`);
-
-    // Colocar ficha en la nueva posición
     this.placeOnBoard();
   }
 

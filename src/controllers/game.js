@@ -239,31 +239,29 @@ class Game {
     }
 
     const currentPlayer = this.getCurrentPlayer();
-    console.log(`${currentPlayer.username} is about to move...`);
+    // Si el jugador está en la cárcel, solo puede actuar según la lógica de cárcel
+    if (currentPlayer.isInJail) {
+      this.handleJailTurn(currentPlayer);
+      return;
+    }
 
-    // Obtener la suma de los dados inmediatamente
+    console.log(`${currentPlayer.username} is about to move...`);
     const diceSum = this.getDiceSum();
-    this.lastDiceRoll = diceSum; // Guardar el último lanzamiento
+    this.lastDiceRoll = diceSum;
     console.log(`Dice sum: ${diceSum}`);
 
     if (diceSum > 0) {
-      console.log(`Moving ${currentPlayer.username} by ${diceSum} spaces`);
-
-      // Mover al jugador
-      currentPlayer.moveBy(diceSum);
-
-      // Mostrar mensaje del movimiento
-      this.showGameMessage(
-        `${currentPlayer.username} se movió ${diceSum} espacios a la posición ${currentPlayer.position}`
-      );
-
-      // Procesar la acción de la casilla
-      this.processSpaceAction(currentPlayer);
-
-      // Actualizar información
-      this.updatePlayerInfoPanel();
-
-      // Pasar al siguiente turno después de un breve delay
+      // Solo permitir movimiento si el jugador NO está en la cárcel
+      if (currentPlayer.isInJail) {
+        this.showGameMessage(`${currentPlayer.username} está en la cárcel y no puede moverse.`);
+      } else {
+        currentPlayer.moveBy(diceSum);
+        this.showGameMessage(
+          `${currentPlayer.username} se movió ${diceSum} espacios a la posición ${currentPlayer.position}`
+        );
+        this.processSpaceAction(currentPlayer);
+        this.updatePlayerInfoPanel();
+      }
       setTimeout(() => {
         this.nextTurn();
       }, 2000);
@@ -644,6 +642,105 @@ class Game {
       case "Ve a la Cárcel":
         this.sendToJail(player);
         break;
+
+        case "Cárcel":
+        this.handleJailTurn(player);
+        break;
+    }
+
+  }
+
+  handleJailTurn(player) {
+    // Si es el primer turno en la cárcel, mostrar opciones
+    if (player.jailTurns === undefined) player.jailTurns = 0;
+    if (!player.isInJail) return;
+
+    // Si ya cumplió 3 turnos, debe pagar obligatoriamente
+    if (player.jailTurns >= 3) {
+      this.showGameMessage(`${player.username} ha cumplido 3 turnos en la cárcel y debe pagar para salir.`);
+      this.payToLeaveJail(player);
+      return;
+    }
+
+    // Mostrar opciones: pagar o intentar tirar dados
+    this.createModal({
+      title: `Cárcel - Turno ${player.jailTurns + 1}`,
+      body: `<div class="text-center">
+        <p>${player.username} está en la cárcel. ¿Qué desea hacer?</p>
+        <p>Pagar $50 para salir o intentar sacar un número par con los dados.</p>
+      </div>`,
+      buttons: [
+        {
+          text: "Pagar $50 y salir",
+          class: "btn-success",
+          action: () => {
+            this.payToLeaveJail(player);
+          }
+        },
+        {
+          text: "Tirar dados",
+          class: "btn-primary",
+          action: () => {
+            this.tryLeaveJailWithDice(player);
+          }
+        }
+      ]
+    });
+  }
+
+  payToLeaveJail(player) {
+    player.money -= 50;
+    player.isInJail = false;
+    player.jailTurns = 0;
+    this.showGameMessage(`${player.username} pagó $50 y salió de la cárcel.`);
+    this.updatePlayerInfoPanel();
+    // Permitir que el jugador tire los dados y avance
+    setTimeout(() => {
+      // Lanzar dados y mover automáticamente
+      const diceSum = this.getDiceSum();
+      this.lastDiceRoll = diceSum;
+      if (diceSum > 0) {
+        player.moveBy(diceSum);
+        this.showGameMessage(`${player.username} se movió ${diceSum} espacios a la posición ${player.position}`);
+        this.processSpaceAction(player);
+        this.updatePlayerInfoPanel();
+      }
+      setTimeout(() => {
+        this.nextTurn();
+      }, 1500);
+    }, 500);
+  }
+
+  tryLeaveJailWithDice(player) {
+    // Lanzar los dados
+    const diceSum = this.getDiceSum();
+    const die1 = document.getElementById("die1");
+    const die2 = document.getElementById("die2");
+    const val1 = die1 ? parseInt(die1.textContent) : 0;
+    const val2 = die2 ? parseInt(die2.textContent) : 0;
+    const isEven = (val1 + val2) % 2 === 0;
+
+    if (isEven && diceSum > 0) {
+      player.isInJail = false;
+      player.jailTurns = 0;
+      this.showGameMessage(`${player.username} sacó un número par (${val1}+${val2}) y salió de la cárcel.`);
+      this.updatePlayerInfoPanel();
+      setTimeout(() => {
+        player.moveBy(diceSum);
+        this.processSpaceAction(player);
+        this.updatePlayerInfoPanel();
+        setTimeout(() => {
+          this.nextTurn();
+        }, 1500);
+      }, 500);
+    } else {
+      player.jailTurns = (player.jailTurns || 0) + 1;
+      this.showGameMessage(`${player.username} no sacó par. Turno en cárcel: ${player.jailTurns}`);
+      this.updatePlayerInfoPanel();
+      // No avanza, solo pasa el turno
+      setTimeout(() => {
+        this.nextTurn();
+      }, 1200);
     }
   }
 
