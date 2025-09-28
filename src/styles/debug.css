@@ -1,0 +1,35 @@
+/* Estilos para los botones de depuración en el tablero Monopoly */
+.debug-btn {
+  position: fixed;
+  left: 20px;
+  z-index: 1000;
+  border-radius: 8px;
+  font-size: 1rem;
+  padding: 8px 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  margin-bottom: 10px;
+}
+
+.debug-btn-secondary {
+  background: #6c757d;
+  color: #fff;
+}
+.debug-btn-info {
+  background: #17a2b8;
+  color: #fff;
+}
+.debug-btn-warning {
+  background: #ffc107;
+  color: #333;
+}
+.debug-btn-danger {
+  background: #dc3545;
+  color: #fff;
+}
+
+@media (max-width: 700px) {
+  .debug-btn {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+  }
+}
