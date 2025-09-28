@@ -38,6 +38,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Función para lanzar los dados y mostrar el resultado
   function rollDice() {
+    // Deshabilitar el botón al lanzar
+    rollDiceButton.disabled = true;
+
     let suma;
     const debug = debugDice.value.trim();
 
@@ -46,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (isNaN(suma) || suma < 1 || suma > 40) {
         alert("Ingrese un número entre 1 y 40.");
         animateInput();
+        rollDiceButton.disabled = false;
         return;
       }
       // Distribuye la suma en dos dados válidos solo visualmente
@@ -69,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
     animateDice();
     sumLabel.textContent = "Suma: " + suma;
     moverFichaJugadorActual(suma);
-    
+
     // Llamar al sistema de juego después de un breve delay para la animación
     setTimeout(() => {
       if (window.gameHandleDiceRoll && typeof window.gameHandleDiceRoll === 'function') {
@@ -80,6 +84,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Asignar el evento de clic al botón "Lanzar Dados"
   rollDiceButton.addEventListener("click", rollDice);
+
+  // Rehabilitar el botón cuando el turno cambie (desde game.js)
+  window.enableRollDiceButton = function() {
+    rollDiceButton.disabled = false;
+  };
 
   // También permitir el lanzamiento de los dados presionando Enter en el campo de depuración
   debugDice.addEventListener("keydown", function (e) {

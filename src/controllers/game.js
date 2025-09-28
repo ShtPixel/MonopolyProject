@@ -726,6 +726,15 @@ class Game {
   }
 
   createModal({ title, body, buttons }) {
+    // Eliminar cualquier modal dinámico existente antes de crear uno nuevo
+    document.querySelectorAll('[id^="dynamic-modal-"]').forEach(el => {
+      // Si el modal está visible, primero ocultarlo
+      if (el.classList.contains('show')) {
+        bootstrap.Modal.getInstance(el)?.hide();
+      }
+      el.remove();
+    });
+
     // Crear modal dinámico
     const modalId = `dynamic-modal-${Date.now()}`;
     const modalHtml = `
@@ -765,6 +774,13 @@ class Game {
       );
       buttonElement.addEventListener("click", () => {
         btn.action();
+        // Mover el foco fuera del modal antes de ocultarlo
+        const rollDiceButton = document.getElementById('rollDiceButton');
+        if (rollDiceButton) {
+          rollDiceButton.focus();
+        } else {
+          document.body.focus();
+        }
         modal.hide();
       });
     });
@@ -1225,6 +1241,11 @@ class Game {
     this.currentPlayerIndex =
       (this.currentPlayerIndex + 1) % this.players.length;
     this.updatePlayerInfoPanel();
+
+    // Habilitar el botón de lanzar dados solo cuando el turno cambie
+    if (window.enableRollDiceButton && typeof window.enableRollDiceButton === 'function') {
+      window.enableRollDiceButton();
+    }
     console.log("Next turn:", this.getCurrentPlayer().username);
   }
 
